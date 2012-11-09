@@ -1,0 +1,15 @@
+Slumlords\Bundle\Entity\Bank:
+    type: entity
+    table: null
+    repositoryClass: Slumlords\Bundle\Entity\BankRepository
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        accountID:
+            type: integer
+        balance:
+            type: float
+    lifecycleCallbacks: {  }

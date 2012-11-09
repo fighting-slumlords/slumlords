@@ -1,0 +1,17 @@
+parameters:
+    database_driver: pdo_mysql
+    database_host: localhost
+    database_port: '3306'
+    database_name: slumlords3
+    database_user: slumlords
+    database_password: aD3slum
+
+    mailer_transport: smtp
+    mailer_host: localhost
+    mailer_user: null
+    mailer_password: null
+
+    locale: en
+    secret: d2d822cec9c5e3ca7424b81891fb1c8050dd883b
+    database_path: null
+

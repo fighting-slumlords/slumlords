@@ -1,0 +1,7 @@
+parameters:
+#    slumlords.example.class: Slumlords\Bundle\Example
+
+services:
+#    slumlords.example:
+#        class: %slumlords.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,3 @@
+slumlords_homepage:
+    pattern:  /
+    defaults: { _controller: SlumlordsBundle:Default:index }

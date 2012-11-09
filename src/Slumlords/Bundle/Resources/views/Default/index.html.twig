@@ -1,0 +1,23 @@
+<html>
+<head>
+{% stylesheets filter='less,cssrewrite,?yui_css'
+    '@MopaBootstrapBundle/Resources/public/less/mopabootstrapbundle.less'
+%}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+{% endstylesheets %}
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="span8">
+            <h1>Slumlords</h1>
+	    <div class="alert alert-info">Symfony/src/Slumlords/Bundle is local bundle directory</div>
+            <p>(11/09) Login and registration is now working. -mjhale</p>
+            <p>(11/08) Twitter Bootstrap is now plugged in and working. -mjhale</p>
+
+            <a class="btn btn-primary" href="login">Login</a>
+            <a class="btn" href="register">Register</a>
+        </div>
+    <div>
+</body>
+</html>
+
