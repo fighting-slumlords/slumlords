@@ -1,176 +1,63 @@
-Symfony Standard Edition
-========================
+Symfony Fighting Slumlords Edition
+==================================
 
-Welcome to the Symfony Standard Edition - a fully-functional Symfony2
-application that you can use as the skeleton for your new applications.
+This is a good place to store some important information regarding how the project is structured. Feel free to update it if you spot any mistakes.
 
-This document contains information on how to download, install, and start
-using Symfony. For a more detailed explanation, see the [Installation][1]
-chapter of the Symfony Documentation.
+The best place for up-to-date information is definitely the [Symfony 2 book](http://symfony.com/doc/current/book/index.html). Reading through it will definitely clear things up. Also, [here's](http://symfony.com/doc/2.0/glossary.html) a page of the terminology being used.
 
-1) Installing the Standard Edition
-----------------------------------
+In order to access the site, use [http://slumlords.chickenkiller.com/app_dev.php/](http://slumlords.chickenkiller.com/app_dev.php/) during development. It won't cache any assets at that URL.
 
-When it comes to installing the Symfony Standard Edition, you have the
-following options.
+1) Style Guide
+--------------
+The primary style guide being used is [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md). Just glancing over the overview should tell you enough. The most important thing to note would likely be the use of 4 spaces for indenting, and not hard tabs.
 
-### Use Composer (*recommended*)
+2) Bundles
+----------
+As of right now Twitter's Bootstrap and FOSUserBundle are being used. Bootstrap for the CSS theming, FOSUserBundle for our users table.
 
-As Symfony uses [Composer][2] to manage its dependencies, the recommended way
-to create a new project is to use it.
+3) Commands
+-----------
+From the root project directory, /Symfony, use the following command:
+    php app/console help list
+        - This will give you a list of commands to use. The most frequently used commands so far:
+    php app/console doctrine:schema:update --force
+        - This makes any schema updates to our database and entities. 
+    php app/console doctrine:mapping:info
+        - This will show all the database mapping information.
 
-If you don't have Composer yet, download it following the instructions on
-http://getcomposer.org/ or just run the following command:
+4) Locations
+------------
+We'll most likely be working primarily in the Symfony/src/Slumlords/Bundle directory. That contains controllers, database entities, bundle configs, and our HTML views. I'll run through where everything should be located (all paths are relative to Symfony/src/Slumlords/Bundle):
 
-    curl -s https://getcomposer.org/installer | php
+-- /Controller
+Most of the time routes will be mapped to controllers. The controller processes information from the request to perform actions and return a Response object (usually the return is a rendered template/view). The default one is called DefaultController.php.
 
-Then, use the `create-project` command to generate a new Symfony application:
+-- /Entity 
+This folder contains our database entities. It uses something called Doctrine for accessing, and manipulating database objects. The particulars (i.e., VARCHAR, AUTO_INCREMENT) of the table and fields (as well as relationships) aren't stored here. I'm not sure what _Repository.php does as of yet. 
 
-    php composer.phar create-project symfony/framework-standard-edition path/to/install 2.1.x-dev
+-- /Resources
+This contains local configs, docs, and views.
 
-For an exact version, replace 2.1.x-dev with the latest Symfony version (e.g. 2.1.1).
+-- /Resources/config
+    - routing.yml 
+      This contains all the routing information. Right now any matches on pattern / will send it to our 
+      DefaultController from earlier.
 
-Composer will install Symfony and all its dependencies under the
-`path/to/install` directory.
+-- /Resources/config/doctrine
+    This is where all the database schema and relations are stored. See the Symfony book for more information.
 
-### Download an Archive File
+-- /Resources/doc
+    I suppose this is where our documentation would be stored. v0v
 
-To quickly test Symfony, you can also download an [archive][3] of the Standard
-Edition and unpack it somewhere under your web server root directory.
+-- /Resources/views
+    This folder contains all the HTML files. It'll be cleaned up and separated into multiple parts later. The stylesheets filter=... command is for including [Twitter's Bootstrap](http://twitter.github.com/bootstrap/)  which is used for theming help.
 
-If you downloaded an archive "without vendors", you also need to install all
-the necessary dependencies. Download composer (see above) and run the
-following command:
+That's all for now. I'll keep adding onto this document later. Feel free to e-mail me any questions you have, or we can use our group's chat on Moodle. - mjhale 
 
-    php composer.phar install
 
-2) Checking your System Configuration
--------------------------------------
+ 
 
-Before starting coding, make sure that your local system is properly
-configured for Symfony.
 
-Execute the `check.php` script from the command line:
 
-    php app/check.php
 
-Access the `config.php` script from a browser:
 
-    http://localhost/path/to/symfony/app/web/config.php
-
-If you get any warnings or recommendations, fix them before moving on.
-
-3) Browsing the Demo Application
---------------------------------
-
-Congratulations! You're now ready to use Symfony.
-
-From the `config.php` page, click the "Bypass configuration and go to the
-Welcome page" link to load up your first Symfony page.
-
-You can also use a web-based configurator by clicking on the "Configure your
-Symfony Application online" link of the `config.php` page.
-
-To see a real-live Symfony page in action, access the following page:
-
-    web/app_dev.php/demo/hello/Fabien
-
-4) Getting started with Symfony
--------------------------------
-
-This distribution is meant to be the starting point for your Symfony
-applications, but it also contains some sample code that you can learn from
-and play with.
-
-A great way to start learning Symfony is via the [Quick Tour][4], which will
-take you through all the basic features of Symfony2.
-
-Once you're feeling good, you can move onto reading the official
-[Symfony2 book][5].
-
-A default bundle, `AcmeDemoBundle`, shows you Symfony2 in action. After
-playing with it, you can remove it by following these steps:
-
-  * delete the `src/Acme` directory;
-
-  * remove the routing entries referencing AcmeBundle in
-    `app/config/routing_dev.yml`;
-
-  * remove the AcmeBundle from the registered bundles in `app/AppKernel.php`;
-
-  * remove the `web/bundles/acmedemo` directory;
-
-  * remove the `security.providers`, `security.firewalls.login` and
-    `security.firewalls.secured_area` entries in the `security.yml` file or
-    tweak the security configuration to fit your needs.
-
-What's inside?
----------------
-
-The Symfony Standard Edition is configured with the following defaults:
-
-  * Twig is the only configured template engine;
-
-  * Doctrine ORM/DBAL is configured;
-
-  * Swiftmailer is configured;
-
-  * Annotations for everything are enabled.
-
-It comes pre-configured with the following bundles:
-
-  * **FrameworkBundle** - The core Symfony framework bundle
-
-  * [**SensioFrameworkExtraBundle**][6] - Adds several enhancements, including
-    template and routing annotation capability
-
-  * [**DoctrineBundle**][7] - Adds support for the Doctrine ORM
-
-  * [**TwigBundle**][8] - Adds support for the Twig templating engine
-
-  * [**SecurityBundle**][9] - Adds security by integrating Symfony's security
-    component
-
-  * [**SwiftmailerBundle**][10] - Adds support for Swiftmailer, a library for
-    sending emails
-
-  * [**MonologBundle**][11] - Adds support for Monolog, a logging library
-
-  * [**AsseticBundle**][12] - Adds support for Assetic, an asset processing
-    library
-
-  * [**JMSSecurityExtraBundle**][13] - Allows security to be added via
-    annotations
-
-  * [**JMSDiExtraBundle**][14] - Adds more powerful dependency injection
-    features
-
-  * **WebProfilerBundle** (in dev/test env) - Adds profiling functionality and
-    the web debug toolbar
-
-  * **SensioDistributionBundle** (in dev/test env) - Adds functionality for
-    configuring and working with Symfony distributions
-
-  * [**SensioGeneratorBundle**][15] (in dev/test env) - Adds code generation
-    capabilities
-
-  * **AcmeDemoBundle** (in dev/test env) - A demo bundle with some example
-    code
-
-Enjoy!
-
-[1]:  http://symfony.com/doc/2.1/book/installation.html
-[2]:  http://getcomposer.org/
-[3]:  http://symfony.com/download
-[4]:  http://symfony.com/doc/2.1/quick_tour/the_big_picture.html
-[5]:  http://symfony.com/doc/2.1/index.html
-[6]:  http://symfony.com/doc/2.1/bundles/SensioFrameworkExtraBundle/index.html
-[7]:  http://symfony.com/doc/2.1/book/doctrine.html
-[8]:  http://symfony.com/doc/2.1/book/templating.html
-[9]:  http://symfony.com/doc/2.1/book/security.html
-[10]: http://symfony.com/doc/2.1/cookbook/email.html
-[11]: http://symfony.com/doc/2.1/cookbook/logging/monolog.html
-[12]: http://symfony.com/doc/2.1/cookbook/assetic/asset_management.html
-[13]: http://jmsyst.com/bundles/JMSSecurityExtraBundle/master
-[14]: http://jmsyst.com/bundles/JMSDiExtraBundle/master
-[15]: http://symfony.com/doc/2.1/bundles/SensioGeneratorBundle/index.html
