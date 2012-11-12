@@ -7,5 +7,11 @@ Slumlords\Bundle\Entity\User:
             id: true
             generator:
                 strategy: AUTO
+        firstName:
+            type: string
+        lastName:
+            type: string
+        wage:
+            type: decimal
     lifecycleCallbacks: {  }
 

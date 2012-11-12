@@ -4,6 +4,7 @@ namespace Slumlords\Bundle\Entity;
 
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -17,6 +18,25 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     *
+     * @Assert\NotBlank(message="Please enter your first name.")
+     */
+    protected $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     *
+     * @Assert\NotBlank(message="Please enter your last name.")
+     */
+    protected $lastName;
+
+    /**
+     * @ORM\Column(type="decimal")
+     */
+    protected $wage;
 
     public function __construct()
     {
