@@ -1,21 +1,46 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-{% stylesheets filter='less,cssrewrite,?yui_css'
-    '@MopaBootstrapBundle/Resources/public/less/mopabootstrapbundle.less'
-%}
-    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
-{% endstylesheets %}
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="span8">
-            <h1>Slumlords</h1>
-	    <div class="alert alert-info">Symfony/src/Slumlords/Bundle is local bundle directory</div>
-            <p>(11/09) Login and registration is now working. -mjhale</p>
-            <p>(11/08) Twitter Bootstrap is now plugged in and working. -mjhale</p>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-            <a class="btn btn-primary" href="login">Login</a>
-            <a class="btn" href="register">Register</a>
+    <title>{% block title %}Fighting Slumlords{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    {% include "SlumlordsBundle:Default:stylesheets.html.twig" %}
+</head>
+<body data-spy="scroll">
+    <div class="row-fluid">
+        <div class="navbar navbar-static-top">
+            <div class="navbar-inner">
+                <a class="brand" href="{{ path('slumlords_homepage') }}">Fighting Slumlords</a>
+                <ul class="nav">
+                    <li><a href="{{ path('slumlords_homepage') }}">Home</a></li>
+                    <li><a href="{{ path('fos_user_security_login') }}">Administration</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="span12">
+            {% block body %}
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <h3>Welcome {{ app.user.username }}.</h3>
+            {% else %}
+                <h3>Welcome.</h3>
+            {% endif %}
+
+            <h4>Changelog</h4>
+            <ul>
+                <li>(11/09) Login and registration is now working. -mjhale</li>
+                <li>(11/08) Twitter Bootstrap is now plugged in and working. -mjhale</li>
+            </ul>
+
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <a class="btn btn-inverse" href="{{ path('fos_user_security_logout') }}">Logout</a>
+            {% else %}
+                <a class="btn btn-primary" href="{{ path('fos_user_security_login') }}">Login</a>
+                <a class="btn" href="{{ path('fos_user_registration_register') }}">Register</a>
+            {% endif %}
+
+            {% endblock %}
         </div>
     <div>
 </body>
