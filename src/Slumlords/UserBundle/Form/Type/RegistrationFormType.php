@@ -15,6 +15,7 @@ class RegistrationFormType extends BaseType
         $builder->setAttribute('formLabel', false);
         $builder->add('firstName');
         $builder->add('lastName');
+        $builder->add('wage');
     }
 
     public function getName()
