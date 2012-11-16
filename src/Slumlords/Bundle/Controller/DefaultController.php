@@ -10,27 +10,17 @@ class DefaultController extends Controller
 {
     public function indexAction() 
     {
-        // Prep mock property
-        $property = new Property();
-        $property->setAccountID(213);
-        $property->setRent(500);
- 
-        // Create mock property data
-        // $em = $this->getDoctrine()->getEntityManager();
-        // $em->persist($property);
-        // $em->flush();
-
-        // Get property data
-        $getProperty = $this->getDoctrine()
-            ->getRepository('SlumlordsBundle:Property')
-            ->find(1);
-
         return $this->render('SlumlordsBundle:Default:index.html.twig');
     }
 
     public function desksAction()
     {
-        return $this->render('SlumlordsBundle:Default:desks.html.twig');
+        $desks = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Property')
+            ->findAll();
+
+        return $this->render('SlumlordsBundle:Default:desks.html.twig', array(
+            'desks' => $desks));
     }
 
     public function bankAction()
