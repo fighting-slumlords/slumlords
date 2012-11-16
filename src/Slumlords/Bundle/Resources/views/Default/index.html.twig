@@ -17,6 +17,7 @@
                     <li><a href="{{ path('slumlords_homepage') }}">Home</a></li>
                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                         <li><a href="{{ path('slumlords_desks') }}">Desks</a></li>
+                        <li><a href="{{ path('slumlords_bank') }}">Bank</a></li>
                         <li><a href="{{ path('fos_user_profile_show') }}">My Account</a></li>
                         {% block nav %}{% endblock %}
                     {% endif %}

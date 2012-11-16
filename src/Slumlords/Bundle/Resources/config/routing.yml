@@ -5,3 +5,7 @@ slumlords_homepage:
 slumlords_desks:
     pattern: /desks
     defaults: { _controller: SlumlordsBundle:Default:desks }
+
+slumlords_bank:
+    pattern: /bank
+    defaults: { _controller: SlumlordsBundle:Default:bank }

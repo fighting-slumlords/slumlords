@@ -32,4 +32,9 @@ class DefaultController extends Controller
     {
         return $this->render('SlumlordsBundle:Default:desks.html.twig');
     }
+
+    public function bankAction()
+    {
+        return $this->render('SlumlordsBundle:Default:bank.html.twig');
+    }
 }
