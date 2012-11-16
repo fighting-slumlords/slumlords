@@ -1,0 +1,15 @@
+Slumlords\Bundle\Entity\Property:
+    type: entity
+    table: null
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        accountID:
+            type: integer
+        rent: 
+            type: float
+    lifecycleCallbacks: {  }
+

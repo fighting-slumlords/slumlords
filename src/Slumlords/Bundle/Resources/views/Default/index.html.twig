@@ -15,22 +15,20 @@
                 <a class="brand" href="{{ path('slumlords_homepage') }}">Fighting Slumlords</a>
                 <ul class="nav">
                     <li><a href="{{ path('slumlords_homepage') }}">Home</a></li>
-                    <li><a href="{{ path('fos_user_security_login') }}">Administration</a></li>
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        <li><a href="{{ path('slumlords_desks') }}">Desks</a></li>
+                        <li><a href="{{ path('fos_user_profile_show') }}">My Account</a></li>
+                        {% block nav %}{% endblock %}
+                    {% endif %}
                 </ul>
             </div>
         </div>
         <div class="span12">
             {% block body %}
-            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                <h3>Welcome {{ app.user.username }}.</h3>
-            {% else %}
-                <h3>Welcome.</h3>
-            {% endif %}
-
-            <h4>Changelog</h4>
+            <img src="http://1.bp.blogspot.com/-Q5DcF4l4G2E/TcRW65FSXfI/AAAAAAAADso/9PiZxiErhJo/s400/slumlord.jpg" alt="Fighting Slumlords" />
+            <h3>Changelog</h3>
             <ul>
-                <li>(11/09) Login and registration is now working. -mjhale</li>
-                <li>(11/08) Twitter Bootstrap is now plugged in and working. -mjhale</li>
+                <li>(11/09) Login and registration is now working.</li>
             </ul>
 
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
@@ -39,10 +37,9 @@
                 <a class="btn btn-primary" href="{{ path('fos_user_security_login') }}">Login</a>
                 <a class="btn" href="{{ path('fos_user_registration_register') }}">Register</a>
             {% endif %}
-
             {% endblock %}
         </div>
-    <div>
+    </div>
 </body>
 </html>
 

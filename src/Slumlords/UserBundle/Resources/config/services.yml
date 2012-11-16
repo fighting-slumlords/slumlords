@@ -1,0 +1,6 @@
+services:
+    slumlords_user.registration.form.type:
+        class: Slumlords\UserBundle\Form\Type\RegistrationFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: slumlords_user_registration }

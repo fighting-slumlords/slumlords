@@ -22,14 +22,14 @@ class User extends BaseUser
     /**
      * @ORM\Column(type="string", length=100)
      *
-     * @Assert\NotBlank(message="Please enter your first name.")
+     * @Assert\NotBlank(message="Please enter your first name.", groups={"Registration", "Profile"})
      */
     protected $firstName;
 
     /**
      * @ORM\Column(type="string", length=100)
      *
-     * @Assert\NotBlank(message="Please enter your last name.")
+     * @Assert\NotBlank(message="Please enter your last name.", groups={"Registration", "Profile"})
      */
     protected $lastName;
 
@@ -41,6 +41,49 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        // your own logic
+    }
+
+    /**
+     * Set firstName
+     *
+     * @return string
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * Get firstName
+     *
+     * @return string 
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Set lastName
+     *
+     * @return string
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Get lastName
+     *
+     * @return string 
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
     }
 }
