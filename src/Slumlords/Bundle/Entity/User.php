@@ -86,4 +86,26 @@ class User extends BaseUser
     {
         return $this->lastName;
     }
+
+    /**
+     * Set wage
+     *
+     * @return string
+     */
+    public function setWage($wage)
+    {
+        $this->wage = $wage;
+
+        return $this;
+    }
+
+    /**
+     * Get wage
+     *
+     * @return string 
+     */
+    public function getwage()
+    {
+        return $this->wage;
+    }
 }
