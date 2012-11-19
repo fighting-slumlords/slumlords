@@ -2,9 +2,7 @@
 
 namespace Slumlords\Bundle\Controller;
 
-use Slumlords\Bundle\Entity\Property;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -18,6 +16,8 @@ class DefaultController extends Controller
         $desks = $this->getDoctrine()
             ->getRepository('SlumlordsBundle:Property')
             ->findAll();
+
+        $this->getDoctrine()->getEntityManager()->flush();
 
         return $this->render('SlumlordsBundle:Default:desks.html.twig', array(
             'desks' => $desks));
