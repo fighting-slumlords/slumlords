@@ -104,8 +104,7 @@ class User extends BaseUser
      *
      * @return string 
      */
-    public function getwage()
+    public function getWage()
     {
         return $this->wage;
     }
-}
