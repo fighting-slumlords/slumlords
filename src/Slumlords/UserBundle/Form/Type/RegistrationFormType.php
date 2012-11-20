@@ -12,7 +12,6 @@ class RegistrationFormType extends BaseType
         parent::buildForm($builder, $options);
 
         // add your custom field
-        $builder->setAttribute('formLabel', false);
         $builder->add('firstName');
         $builder->add('lastName');
         $builder->add('wage');

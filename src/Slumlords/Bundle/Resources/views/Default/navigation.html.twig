@@ -1,4 +1,4 @@
-<div class="navbar navbar-fixed-top">
+<div class="navbar">
     <div class="navbar-inner">
         <a class="brand" href="{{ path('slumlords_homepage') }}">Fighting Slumlords</a>
 
@@ -11,22 +11,23 @@
 		        <li><a href="{{ path('fos_user_profile_show') }}">My Account</a></li>
 		    {% endif %}
 
-		    {% if is_granted('ROLE_USER') %}
+		    {% if is_granted('ROLE_SUPER_ADMIN') %}
 		    	<li class="dropdown">
 		    		<a id="dropdown-super-admin" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
 		    			Administration
 		    			<b class="caret"></b>
 		    		</a>
-		    		<ul class="dropdown-menu" role="menu" aria-labelledby"dropdown-super-admin">
+		    		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-super-admin">
 		    			<li>
-		    				<a tabindex="-1" href="#">View Classes</a>
+		    				<a href="{{ path('slumlords_admin_users') }}">Users</a>
 		    			</li>
 		    			<li>
-		    				<a tabindex="-1" href="#">View Users</a>
+		    				<a href="{{ path('slumlords_admin_classes') }}">Classes</a>
 		    			</li>
 		    		</ul>
 		    	</li>
 		    {% endif %}
+
 		</ul>
     </div>
 </div>

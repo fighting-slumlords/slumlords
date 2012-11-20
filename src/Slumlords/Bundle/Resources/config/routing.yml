@@ -2,6 +2,22 @@ slumlords_homepage:
     pattern:  /
     defaults: { _controller: SlumlordsBundle:Default:index }
 
+slumlords_admin:
+    pattern:  /admin
+    defaults: { _controller: SlumlordsBundle:Admin:index }
+
+slumlords_admin_users:
+    pattern:  /admin/users
+    defaults: { _controller: SlumlordsBundle:Admin:users }
+
+slumlords_admin_edit_user:
+    pattern:  /admin/user/{id}
+    defaults: { _controller: SlumlordsBundle:Admin:editUser }
+
+slumlords_admin_classes:
+    pattern:  /admin/classes
+    defaults: { _controller: SlumlordsBundle:Admin:classes }
+
 slumlords_desks:
     pattern: /desks
     defaults: { _controller: SlumlordsBundle:Default:desks }
