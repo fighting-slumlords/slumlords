@@ -10,13 +10,33 @@ slumlords_admin_users:
     pattern:  /admin/users
     defaults: { _controller: SlumlordsBundle:Admin:users }
 
-slumlords_admin_edit_user:
-    pattern:  /admin/user/{id}
-    defaults: { _controller: SlumlordsBundle:Admin:editUser }
+slumlords_admin_user_add:
+    pattern:  /admin/users/add
+    defaults: { _controller: SlumlordsBundle:Admin:userAdd }
 
-slumlords_admin_classes:
-    pattern:  /admin/classes
-    defaults: { _controller: SlumlordsBundle:Admin:classes }
+slumlords_admin_user_edit:
+    pattern:  /admin/users/{id}/edit
+    defaults: { _controller: SlumlordsBundle:Admin:userEdit }
+
+slumlords_admin_user_show:
+    pattern:  /admin/users/{id}
+    defaults: { _controller: SlumlordsBundle:Admin:userShow }
+
+slumlords_admin_courses:
+    pattern:  /admin/courses
+    defaults: { _controller: SlumlordsBundle:Admin:courses }
+
+slumlords_admin_course_add:
+    pattern:  /admin/courses/add
+    defaults: { _controller: SlumlordsBundle:Admin:courseAdd }
+
+slumlords_admin_course_edit:
+    pattern:  /admin/courses/{id}/edit
+    defaults: { _controller: SlumlordsBundle:Admin:courseEdit }
+
+slumlords_admin_course_show:
+    pattern:  /admin/courses/{id}
+    defaults: { _controller: SlumlordsBundle:Admin:courseShow }
 
 slumlords_desks:
     pattern: /desks

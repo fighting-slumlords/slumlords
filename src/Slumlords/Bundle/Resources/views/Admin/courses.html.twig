@@ -1,0 +1,35 @@
+{% extends 'SlumlordsBundle:Default:index.html.twig' %}
+
+{% block body %}
+<h1>Courses <a href="{{ path('slumlords_admin_course_add') }}" class="btn btn-mini btn-primary">Add New Course</a></h1>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<td>Course ID</td>
+			<td>Course Name</td>
+			<td>Columns</td>
+			<td>Rows</td>
+			<td>Status</td>
+			<td>Manage</td>
+		</tr>
+	</thead>
+	<tbody>
+	{# Loop through all courses#}
+	{% for course in courses %}
+		<tr>
+			<td>{{ course.id }}</td>
+			<td>{{ course.name }}</td>
+			<td>{{ course.columns }}</td>
+			<td>{{ course.rows }}</td>
+			<td>{{ course.active }}</td>
+			{# Manage user links (Edit, Delete) #}
+			<td>
+				<a href="{{ path('slumlords_admin_course_edit', {'id': course.id}) }}" class="btn btn-mini">Edit</a>
+				<a href="#" class="btn btn-mini btn-danger">Deactivate</a>
+			</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}

@@ -15,17 +15,19 @@
 
             <div class="span12">
                 {% block body %}
-                <img src="http://1.bp.blogspot.com/-Q5DcF4l4G2E/TcRW65FSXfI/AAAAAAAADso/9PiZxiErhJo/s400/slumlord.jpg" alt="Fighting Slumlords" />
-                <h3>Changelog</h3>
-                <ul>
-                    <li>(11/09) Login and registration is now working.</li>
-                </ul>
+                <img src="http://1.bp.blogspot.com/-Q5DcF4l4G2E/TcRW65FSXfI/AAAAAAAADso/9PiZxiErhJo/s400/slumlord.jpg" alt="Fighting Slumlords" align="left" />
+                <div>
+                    <h2>0160 Class Sessions</h2>
+                    <h2>0030 Slumlords</h2>
+                    <h2>0004 Courses</h2>
+                    <h2>5032 Logins</h2>
+                </div>
+
 
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <a class="btn btn-inverse" href="{{ path('fos_user_security_logout') }}">Logout</a>
+                    <a class="btn btn-large btn-inverse" href="{{ path('fos_user_security_logout') }}">Logout</a>
                 {% else %}
-                    <a class="btn btn-primary" href="{{ path('fos_user_security_login') }}">Login</a>
-                    <a class="btn" href="{{ path('fos_user_registration_register') }}">Register</a>
+                    <a class="btn btn-large btn-primary" href="{{ path('fos_user_security_login') }}">Login</a>
                 {% endif %}
                 {% endblock %}
             </div>

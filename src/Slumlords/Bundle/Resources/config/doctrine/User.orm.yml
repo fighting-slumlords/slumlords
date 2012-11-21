@@ -14,4 +14,7 @@ Slumlords\Bundle\Entity\User:
         wage:
             type: decimal
     lifecycleCallbacks: {  }
-
+    manyToMany:
+        courses:
+            targetEntity: Course 
+            mappedBy: users

@@ -2,51 +2,50 @@
 
 namespace Slumlords\Bundle\Entity;
 
-use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Entity\User as BaseUser;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="fos_user")
+ * Slumlords\Bundle\Entity\User
  */
 class User extends BaseUser
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
-    /**
-     * @ORM\Column(type="string", length=100)
-     *
-     * @Assert\NotBlank(message="Please enter your first name.", groups={"Registration", "Profile"})
-     */
-    protected $firstName;
-
-    /**
-     * @ORM\Column(type="string", length=100)
-     *
-     * @Assert\NotBlank(message="Please enter your last name.", groups={"Registration", "Profile"})
-     */
-    protected $lastName;
-
-    /**
-     * @ORM\Column(type="decimal")
-     */
-    protected $wage;
-
     public function __construct()
     {
         parent::__construct();
     }
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $classes;
+
+    /**
+     * @var string $firstName
+     */
+    private $firstName;
+
+    /**
+     * @var string $lastName
+     */
+    private $lastName;
+
+    /**
+     * @var decimal $wage
+     */
+    private $wage;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $courses;
+
+    /**
      * Set firstName
      *
-     * @return string
+     * @param string $firstName
+     * @return User
      */
     public function setFirstName($firstName)
     {
@@ -68,7 +67,8 @@ class User extends BaseUser
     /**
      * Set lastName
      *
-     * @return string
+     * @param string $lastName
+     * @return User
      */
     public function setLastName($lastName)
     {
@@ -90,7 +90,8 @@ class User extends BaseUser
     /**
      * Set wage
      *
-     * @return string
+     * @param decimal $wage
+     * @return User
      */
     public function setWage($wage)
     {
@@ -107,5 +108,38 @@ class User extends BaseUser
     public function getWage()
     {
         return $this->wage;
+    }
+
+    /**
+     * Add courses
+     *
+     * @param Slumlords\Bundle\Entity\Course $courses
+     * @return User
+     */
+    public function addCourse(\Slumlords\Bundle\Entity\Course $courses)
+    {
+        $this->courses[] = $courses;
+    
+        return $this;
+    }
+
+    /**
+     * Remove courses
+     *
+     * @param Slumlords\Bundle\Entity\Course $courses
+     */
+    public function removeCourse(\Slumlords\Bundle\Entity\Course $courses)
+    {
+        $this->courses->removeElement($courses);
+    }
+
+    /**
+     * Get courses
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getCourses()
+    {
+        return $this->courses;
     }
 }

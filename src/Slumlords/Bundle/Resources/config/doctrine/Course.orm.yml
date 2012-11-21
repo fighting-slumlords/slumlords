@@ -1,0 +1,29 @@
+Slumlords\Bundle\Entity\Course:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        columns:
+            type: integer
+        name:
+            type: string
+            length: 100
+        rows:
+            type: integer
+        active:
+            type: boolean
+    manyToMany:
+        users:
+            targetEntity: User
+            inversedBy: courses
+            joinTable:
+                name: users_courses
+                joinColumns:
+                    user_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    course_id:
+                        referencedColumnName: id

@@ -3,8 +3,6 @@
         <a class="brand" href="{{ path('slumlords_homepage') }}">Fighting Slumlords</a>
 
 		<ul class="nav" role="navigation">
-		    <li><a href="{{ path('slumlords_homepage') }}">Home</a></li>
-
 		    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 		        <li><a href="{{ path('slumlords_desks') }}">Desks</a></li>
 		        <li><a href="{{ path('slumlords_bank') }}">Bank</a></li>
@@ -22,7 +20,7 @@
 		    				<a href="{{ path('slumlords_admin_users') }}">Users</a>
 		    			</li>
 		    			<li>
-		    				<a href="{{ path('slumlords_admin_classes') }}">Classes</a>
+		    				<a href="{{ path('slumlords_admin_courses') }}">Courses</a>
 		    			</li>
 		    		</ul>
 		    	</li>

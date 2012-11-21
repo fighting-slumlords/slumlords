@@ -1,0 +1,22 @@
+Slumlords\Bundle\Entity\Log:
+    type: entity
+    table: null
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        logType:
+            type: string
+        timestamp:
+            type: datetime
+        amount:
+            type: decimal
+        targetID:
+            type: integer
+        originID:
+            type: integer
+        propertyID:
+            type: integer
+    lifecycleCallbacks: {  }

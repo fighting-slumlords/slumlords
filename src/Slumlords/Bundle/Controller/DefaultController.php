@@ -19,9 +19,7 @@ class DefaultController extends Controller
         $desks = $this->getDoctrine()
             ->getRepository('SlumlordsBundle:Property')
             ->findAll();
-
-        $this->getDoctrine()->getEntityManager()->flush();
-
+            
         return $this->render('SlumlordsBundle:Default:desks.html.twig', array(
             'desks' => $desks));
     }
