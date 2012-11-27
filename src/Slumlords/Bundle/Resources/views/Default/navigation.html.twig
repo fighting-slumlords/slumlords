@@ -6,7 +6,7 @@
 		    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 		        <li><a href="{{ path('slumlords_properties') }}">Properties</a></li>
 		        <li><a href="{{ path('slumlords_bank') }}">Bank</a></li>
-		        <li><a href="{{ path('fos_user_profile_show') }}">My Account</a></li>
+		        <li><a href="{{ path('slumlords_myAccount') }}">My Account</a></li>
 		    {% endif %}
 
 		    {% if is_granted('ROLE_SUPER_ADMIN') %}
