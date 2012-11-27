@@ -5,9 +5,9 @@
 
 <form>
  <fieldset>
-  Name: user.firstName, user.lastName <br>
-  Email: user.email <br>
-  Course: course.id, course.name 
+  Name: {{user.firstName}}, {{user.lastName}} <br>
+  Email: {{user.email}} <br>
+  Course: {{course.id}}, {{course.name}} 
  </fieldset>
 </form>
 
@@ -22,9 +22,9 @@
     <th>Rent</th>
   </tr>
   <tr>
-    <td>user.wage</td>
+    <td>{{user.wage}}</td>
     <td>DESK 1 (need sql id)</td>
-    <td>property.rent</td>
+    <td>{{property.rent}}</td>
   </tr>
 </table>
                     
