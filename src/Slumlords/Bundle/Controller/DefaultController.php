@@ -14,14 +14,14 @@ class DefaultController extends Controller
             'user' => $user));
     }
 
-    public function desksAction()
+    public function propertiesAction()
     {
-        $desks = $this->getDoctrine()
+        $properties = $this->getDoctrine()
             ->getRepository('SlumlordsBundle:Property')
             ->findAll();
             
-        return $this->render('SlumlordsBundle:Default:desks.html.twig', array(
-            'desks' => $desks));
+        return $this->render('SlumlordsBundle:Default:properties.html.twig', array(
+            'properties' => $properties));
     }
 
     public function bankAction()

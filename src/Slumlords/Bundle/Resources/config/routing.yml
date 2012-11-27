@@ -38,9 +38,9 @@ slumlords_admin_course_show:
     pattern:  /admin/courses/{id}
     defaults: { _controller: SlumlordsBundle:Admin:courseShow }
 
-slumlords_desks:
-    pattern: /desks
-    defaults: { _controller: SlumlordsBundle:Default:desks }
+slumlords_properties:
+    pattern: /properties
+    defaults: { _controller: SlumlordsBundle:Default:properties }
 
 slumlords_bank:
     pattern: /bank
