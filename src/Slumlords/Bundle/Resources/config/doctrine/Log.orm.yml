@@ -13,10 +13,14 @@ Slumlords\Bundle\Entity\Log:
             type: datetime
         amount:
             type: decimal
+            nullable: true
         targetID:
             type: integer
+            nullable: true
         originID:
             type: integer
+            nullable: true
         propertyID:
             type: integer
+            nullable: true
     lifecycleCallbacks: {  }

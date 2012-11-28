@@ -7,7 +7,6 @@
  <fieldset>
   Name: {{user.lastName}}, {{user.firstName}} <br>
   Email: {{user.email}} <br>
-  Course: {{course.id}}, {{course.name}} 
  </fieldset>
 </form>
 
@@ -24,11 +23,10 @@
   <tr>
     <td>{{user.wage}}</td>
     <td>DESK 1 (need sql id)</td>
-    <td>{{property.rent}}</td>
+    <td> property.rent </td>
   </tr>
 </table>
-                    
 
-
+<a href="{{ path('fos_user_profile_edit') }}" class="btn">Edit Profile</a>
 {% endblock %}
 

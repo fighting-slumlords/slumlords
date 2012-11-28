@@ -142,4 +142,42 @@ class User extends BaseUser
     {
         return $this->courses;
     }
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $property;
+
+    /**
+     * Add property
+     *
+     * @param Slumlords\Bundle\Entity\Property $property
+     * @return User
+     */
+    public function addProperty(\Slumlords\Bundle\Entity\Property $property)
+    {
+        $this->property[] = $property;
+    
+        return $this;
+    }
+
+    /**
+     * Remove property
+     *
+     * @param Slumlords\Bundle\Entity\Property $property
+     */
+    public function removeProperty(\Slumlords\Bundle\Entity\Property $property)
+    {
+        $this->property->removeElement($property);
+    }
+
+    /**
+     * Get property
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getProperty()
+    {
+        return $this->property;
+    }
 }

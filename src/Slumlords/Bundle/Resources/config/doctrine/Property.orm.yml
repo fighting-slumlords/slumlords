@@ -12,7 +12,17 @@ Slumlords\Bundle\Entity\Property:
         rent: 
             type: float
     lifecycleCallbacks: {  }
-
-
-
-
+    manyToOne:
+        user:
+            targetEntity: User
+            inversedBy: property
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+    manyToOne:
+        course:
+            targetEntity: Course
+            inversedBy: property
+            joinColumn:
+                name: course_id
+                referencedColumnName: id

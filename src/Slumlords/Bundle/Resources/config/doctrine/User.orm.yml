@@ -18,6 +18,7 @@ Slumlords\Bundle\Entity\User:
         courses:
             targetEntity: Course 
             mappedBy: users
-
-
-
+    oneToMany:
+        property:
+            targetEntity: Property
+            mappedBy: users

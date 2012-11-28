@@ -1,0 +1,10 @@
+{% extends 'SlumlordsBundle:Default:index.html.twig' %}
+
+{% block body %}
+	<h1>Add User</h1>
+	<form action="{{ path('slumlords_admin_user_add')  }}" method="post" {{ form_enctype(form) }}>
+	    {{ form_widget(form) }}
+
+	    <input type="submit" />
+	</form>
+{% endblock %}

@@ -27,3 +27,7 @@ Slumlords\Bundle\Entity\Course:
                 inverseJoinColumns:
                     course_id:
                         referencedColumnName: id
+    oneToMany:
+        property:
+            targetEntity: Property
+            mappedBy: courses

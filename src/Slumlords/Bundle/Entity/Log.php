@@ -195,4 +195,22 @@ class Log
     {
         return $this->propertyID;
     }
+
+    /**
+     * Set entry
+     *
+     * @param integer $propertyID
+     * @return Log
+     */
+    public function entry($logType = 'transaction', $amount = null, $targetID = null, $originID = null, $propertyID = null)
+    {
+        $this->logType = $logType;
+        $this->timestamp = new \DateTime('now');
+        $this->amount = $amount;
+        $this->targetID = $targetID;
+        $this->originID = $originID;
+        $this->propertyID = $propertyID;
+
+        return $this;
+    }
 }

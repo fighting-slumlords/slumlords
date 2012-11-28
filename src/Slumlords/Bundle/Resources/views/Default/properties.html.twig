@@ -1,0 +1,15 @@
+{% extends 'SlumlordsBundle:Default:index.html.twig' %}
+
+{% block body %}
+<h1>Properties</h1>
+
+<div class="properties">
+    {% for property in properties %}
+        <div class="span2">
+            <strong>{{ property.id }}</strong>
+            <p>{{ property.accountID }}</p>
+            <p>${{ property.rent }}</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
