@@ -9,19 +9,21 @@
 		        <li><a href="{{ path('fos_user_profile_show') }}">My Account</a></li>
 		    {% endif %}
 
-		    {% if is_granted('ROLE_SUPER_ADMIN') %}
+		    {% if is_granted('ROLE_INSTRUCTOR') %}
 		    	<li class="dropdown">
 		    		<a id="dropdown-super-admin" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
 		    			Administration
 		    			<b class="caret"></b>
 		    		</a>
 		    		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-super-admin">
+                                        {% if is_granted('ROLE_SUPER_ADMIN') %}
 		    			<li>
 		    				<a href="{{ path('slumlords_admin_users') }}">Users</a>
 		    			</li>
 		    			<li>
 		    				<a href="{{ path('slumlords_admin_courses') }}">Courses</a>
 		    			</li>
+                                        {% endif %}
 		    		</ul>
 		    	</li>
 		    {% endif %}

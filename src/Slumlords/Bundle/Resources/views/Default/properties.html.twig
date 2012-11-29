@@ -1,15 +1,27 @@
 {% extends 'SlumlordsBundle:Default:index.html.twig' %}
 
 {% block body %}
+<div style="float: right;">
+    <select>
+      <option>{{ course.name }}</option>
+    </select>
+</div>
+
 <h1>Properties</h1>
 
-<div class="properties">
-    {% for property in properties %}
-        <div class="span2">
-            <strong>{{ property.id }}</strong>
-            <p>{{ property.accountID }}</p>
-            <p>${{ property.rent }}</p>
-        </div>
+<table class="table properties" cellspacing="10" cellpadding="10">
+    <tbody>
+    {% for i in 1..course.columns %}
+        <tr>
+            {% for j in 1..course.rows %}
+                {% set property = course.getProperties[(j-1)*course.columns+(i-1)] %}
+                <td class="span2">
+                    {{ property.id }}<br />
+                    Rent: {{ property.rent }}
+                </td>
+            {% endfor %}
+        </td>
     {% endfor %}
-</div>
+    </tbody>
+</table>
 {% endblock %}

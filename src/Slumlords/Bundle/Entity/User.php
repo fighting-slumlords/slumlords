@@ -4,23 +4,12 @@ namespace Slumlords\Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Entity\User as BaseUser;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Slumlords\Bundle\Entity\User
  */
 class User extends BaseUser
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    private $classes;
-
     /**
      * @var string $firstName
      */
@@ -32,7 +21,7 @@ class User extends BaseUser
     private $lastName;
 
     /**
-     * @var decimal $wage
+     * @var float $wage
      */
     private $wage;
 
@@ -40,6 +29,21 @@ class User extends BaseUser
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     private $courses;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $properties;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->courses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->properties = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set firstName
@@ -50,7 +54,7 @@ class User extends BaseUser
     public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
-
+    
         return $this;
     }
 
@@ -73,7 +77,7 @@ class User extends BaseUser
     public function setLastName($lastName)
     {
         $this->lastName = $lastName;
-
+    
         return $this;
     }
 
@@ -90,20 +94,20 @@ class User extends BaseUser
     /**
      * Set wage
      *
-     * @param decimal $wage
+     * @param float $wage
      * @return User
      */
     public function setWage($wage)
     {
         $this->wage = $wage;
-
+    
         return $this;
     }
 
     /**
      * Get wage
      *
-     * @return string 
+     * @return float 
      */
     public function getWage()
     {
@@ -144,40 +148,35 @@ class User extends BaseUser
     }
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    private $property;
-
-    /**
-     * Add property
+     * Add properties
      *
-     * @param Slumlords\Bundle\Entity\Property $property
+     * @param Slumlords\Bundle\Entity\Property $properties
      * @return User
      */
-    public function addProperty(\Slumlords\Bundle\Entity\Property $property)
+    public function addProperty(\Slumlords\Bundle\Entity\Property $properties)
     {
-        $this->property[] = $property;
+        $this->properties[] = $properties;
     
         return $this;
     }
 
     /**
-     * Remove property
+     * Remove properties
      *
-     * @param Slumlords\Bundle\Entity\Property $property
+     * @param Slumlords\Bundle\Entity\Property $properties
      */
-    public function removeProperty(\Slumlords\Bundle\Entity\Property $property)
+    public function removeProperty(\Slumlords\Bundle\Entity\Property $properties)
     {
-        $this->property->removeElement($property);
+        $this->properties->removeElement($properties);
     }
 
     /**
-     * Get property
+     * Get properties
      *
      * @return Doctrine\Common\Collections\Collection 
      */
-    public function getProperty()
+    public function getProperties()
     {
-        return $this->property;
+        return $this->properties;
     }
 }

@@ -1,6 +1,53 @@
 {% extends 'SlumlordsBundle:Default:index.html.twig' %}
 
 {% block body %}
-<h1>Bank</h1>
-Yes, this is bank.
+<h1>{{user.firstName}} {{user.lastName}}'s Bank Account</h1>
+
+<strong>Balance:</strong> ${{account.balance}} 
+<strong>Wage:</strong> ${{user.wage}}
+
+<div style="float: right;">
+    <select>
+      <option>ECON 213</option>
+      <option>MATH 333</option>
+    </select>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td>Date</td>
+            <td>Type</td>
+            <td>Amount</td>
+            <td>Target</td>
+            <td>Origin</td>
+            <td>Property</td>
+        <tr>
+    <thead>
+    <tbody>
+    {# Loop through the Log#}
+    {% for entry in log if loop.index0 < 5%}
+        <tr>
+            <td>{{entry.timestamp | date('F j, Y H:i') }}</td>
+            <td>{{entry.logType}}</td>
+            <td>{{entry.amount}}</td>
+            <td>{{entry.targetID}}</td>
+            <td>{{entry.originID}}</td>
+            <td>{{entry.propertyID}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<div class="pagination pagination-centered">
+  <ul>
+    <li><a href="#">Prev</a></li>
+    <li><a href="#">1</a></li>
+    <li><a href="#">2</a></li>
+    <li><a href="#">3</a></li>
+    <li><a href="#">4</a></li>
+    <li><a href="#">Next</a></li>
+  </ul>
+</div>
+
 {% endblock %}

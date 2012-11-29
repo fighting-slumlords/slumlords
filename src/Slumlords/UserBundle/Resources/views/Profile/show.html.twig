@@ -1,31 +1,21 @@
 {% extends 'SlumlordsBundle:Default:index.html.twig' %}
 
 {% block body %}
-<h1>My Account</h1>
+
+<header>
+  <div class="wrapper">
+    <a href="#"><img src="http://1.bp.blogspot.com/-Q5DcF4l4G2E/TcRW65FSXfI/AAAAAAAADso/9PiZxiErhJo/s400/slumlord.jpg" alt="Fighting Slumlords" title="Fighting Slumlords"/></a>
+  </div>
+</header>
+
+
+<h1> {{user.firstName}}'s Account</h1>
 
 <form>
- <fieldset>
-  Name: {{user.lastName}}, {{user.firstName}} <br>
-  Email: {{user.email}} <br>
- </fieldset>
+  <strong>Name:</strong> {{user.lastName}}, {{user.firstName}} <br>
+  <strong>Email:</strong> {{user.email}} <br>
 </form>
 
-<table border="1">
-  <colgroup>
-    <col span="2" style="background-color:grey">
-    <col style="background-color:red">
-  </colgroup>
-  <tr>
-    <th>Wage</th>
-    <th>Desk</th>
-    <th>Rent</th>
-  </tr>
-  <tr>
-    <td>{{user.wage}}</td>
-    <td>DESK 1 (need sql id)</td>
-    <td> property.rent </td>
-  </tr>
-</table>
 
 <a href="{{ path('fos_user_profile_edit') }}" class="btn">Edit Profile</a>
 {% endblock %}

@@ -5,6 +5,7 @@ namespace Slumlords\Bundle\Controller;
 use Doctrine\ORM\EntityRepository;
 use Slumlords\Bundle\Entity\Course;
 use Slumlords\Bundle\Entity\User;
+use Slumlords\Bundle\Entity\Property;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -51,14 +52,27 @@ class AdminController extends Controller
             if ($form->isValid()) 
             {
                 $em = $this->getDoctrine()->getManager();
+                $totalProperties = $form->get('columns')->getData() * $form->get('rows')->getData();
+
+                for ($i = 0; $i < $totalProperties; $i++) {
+                    $property = new Property();
+                    $property->setRent(0);
+                    $em->persist($property);
+                    $em->flush();
+
+                    $course->addProperty($property);
+                }
+
                 $em->persist($course);
                 $em->flush();
+
+
 
                 //$log = new Log();
                 // .. some code goes here
 
                 // After save, redirect viewer back to users list
-                return $this->redirect($this->generateUrl('slumlords_admin_courses'));;
+                return $this->redirect($this->generateUrl('slumlords_admin_courses'));
             }
         }
 

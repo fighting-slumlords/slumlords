@@ -1,6 +1,5 @@
 Slumlords\Bundle\Entity\Course:
     type: entity
-    table: null
     id:
         id:
             type: integer
@@ -18,16 +17,15 @@ Slumlords\Bundle\Entity\Course:
     manyToMany:
         users:
             targetEntity: User
-            inversedBy: courses
+            mappedBy: courses
+        properties:
+            targetEntity: Property
             joinTable:
-                name: users_courses
+                name: courses_properties
                 joinColumns:
-                    user_id:
-                        referencedColumnName: id
-                inverseJoinColumns:
                     course_id:
                         referencedColumnName: id
-    oneToMany:
-        property:
-            targetEntity: Property
-            mappedBy: courses
+                inverseJoinColumns:
+                    property_id:
+                        referencedColumnName: id
+                        unique: true

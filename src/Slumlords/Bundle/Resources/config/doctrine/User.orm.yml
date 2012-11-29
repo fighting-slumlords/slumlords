@@ -1,6 +1,5 @@
 Slumlords\Bundle\Entity\User:
     type: entity
-    table: null
     fields:
         id:
             type: integer
@@ -13,12 +12,27 @@ Slumlords\Bundle\Entity\User:
             type: string
         wage:
             type: decimal
-    lifecycleCallbacks: {  }
     manyToMany:
         courses:
-            targetEntity: Course 
-            mappedBy: users
-    oneToMany:
-        property:
+            targetEntity: Course
+            inversedBy: users
+            joinTable:
+                name: users_courses
+                joinColumns:
+                    user_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    course_id: 
+                        referencedColumnName: id
+        properties:
             targetEntity: Property
-            mappedBy: users
+            joinTable:
+                name: users_properties
+                joinColumns:
+                    user_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    property_id:
+                        referencedColumnName: id
+                        unique: true
+    lifecycleCallbacks: {  }

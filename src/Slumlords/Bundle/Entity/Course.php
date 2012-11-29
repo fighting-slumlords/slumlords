@@ -40,11 +40,17 @@ class Course
     private $users;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $properties;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->properties = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -181,42 +187,37 @@ class Course
     {
         return $this->users;
     }
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    private $property;
-
 
     /**
-     * Add property
+     * Add properties
      *
-     * @param Slumlords\Bundle\Entity\Property $property
+     * @param Slumlords\Bundle\Entity\Property $properties
      * @return Course
      */
-    public function addProperty(\Slumlords\Bundle\Entity\Property $property)
+    public function addProperty(\Slumlords\Bundle\Entity\Property $properties)
     {
-        $this->property[] = $property;
+        $this->properties[] = $properties;
     
         return $this;
     }
 
     /**
-     * Remove property
+     * Remove properties
      *
-     * @param Slumlords\Bundle\Entity\Property $property
+     * @param Slumlords\Bundle\Entity\Property $properties
      */
-    public function removeProperty(\Slumlords\Bundle\Entity\Property $property)
+    public function removeProperty(\Slumlords\Bundle\Entity\Property $properties)
     {
-        $this->property->removeElement($property);
+        $this->properties->removeElement($properties);
     }
 
     /**
-     * Get property
+     * Get properties
      *
      * @return Doctrine\Common\Collections\Collection 
      */
-    public function getProperty()
+    public function getProperties()
     {
-        return $this->property;
+        return $this->properties;
     }
 }
