@@ -5,6 +5,7 @@ namespace Slumlords\Bundle\Controller;
 use Doctrine\ORM\EntityRepository;
 use Slumlords\Bundle\Entity\Course;
 use Slumlords\Bundle\Entity\User;
+use Slumlords\Bundle\Entity\Bank;
 use Slumlords\Bundle\Entity\Property;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +40,7 @@ class AdminController extends Controller
             ->add('active', 'choice', array(
                 'choices'  => array(0 => 'Enabled', 1 => 'Disabled'),
                 'preferred_choices' => array(0),
-                'required' => true,
+                'required' => false, // true
             ))
             ->getForm();
 
@@ -54,17 +55,20 @@ class AdminController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $totalProperties = $form->get('columns')->getData() * $form->get('rows')->getData();
 
+                $em->persist($course);
+                $em->flush();
+
+                // Populate the database with properties
                 for ($i = 0; $i < $totalProperties; $i++) {
                     $property = new Property();
                     $property->setRent(0);
+                    $property->setIsActive(1);
+                    $property->setCourse($course);
                     $em->persist($property);
                     $em->flush();
-
-                    $course->addProperty($property);
                 }
 
-                $em->persist($course);
-                $em->flush();
+
 
 
 
@@ -83,7 +87,41 @@ class AdminController extends Controller
 
     public function courseEditAction($id, Request $request) 
     {
+        $course = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Course')
+            ->find($id);
 
+        // Prep the form for display
+        $form = $this->createFormBuilder($course)
+            ->add('columns', 'integer')
+            ->add('rows', 'integer')
+            ->add('name', 'text')
+            ->add('active', 'choice', array(
+                'choices'  => array(0 => 'Enabled', 1 => 'Disabled'),
+                'required' => false, // true
+            ))
+            ->getForm();
+
+        // Catch the POST update once user saves the form
+        // and hits the page again
+        if ($request->isMethod('POST')) 
+        {
+            $form->bind($request);
+
+            if ($form->isValid())
+            {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($course);
+                $em->flush();
+
+                return $this->redirect($this->generateUrl('slumlords_admin_courses'));;
+            }
+        }
+
+        return $this->render('SlumlordsBundle:Admin:course_edit.html.twig', array(
+            'course' => $course,
+            'form' => $form->createView(),
+        ));
     }
 
     public function courseShowAction($id) 
@@ -121,21 +159,18 @@ class AdminController extends Controller
                 'choices'  => array(0 => 'Enabled', 1 => 'Disabled'),
                 'preferred_choices' => array(0),
                 'required' => true,
-            ))            
+            ))       
             ->add('roleList', 'choice', array(
-                'choices'   => array(
-                    'ROLE_SUPER_ADMIN'   => 'ROLE_SUPER_ADMIN',
-                    'ROLE_INSTRUCTOR' => 'ROLE_INSTRUCTOR',
-                    'ROLE_STUDENT' => 'ROLE_STUDENT',
-                ),
+                'choices'   => $this->container->getParameter('security.role_hierarchy.roles'),
                 'expanded' => false,
-                'label' => 'Roles',
-                'multiple'  => true,
+                'label' => 'Role',
+                'multiple'  => false,
                 'property_path' => false,
             ))
             ->add('courses', null, array(
                 'class' => 'Slumlords\Bundle\Entity\Course',
                 'property' => 'name',
+                'expanded' => true
             ))
             ->getForm();
 
@@ -147,6 +182,9 @@ class AdminController extends Controller
 
             if ($form->isValid()) 
             {
+                $roles = $form->get('roleList')->getData();
+                $user->addRole($roles);
+
                 if ($form->get('password')->getData()) 
                 {
                     $factory = $this->get('security.encoder_factory');
@@ -179,6 +217,12 @@ class AdminController extends Controller
             ->getRepository('SlumlordsBundle:User')
             ->find($id);
 
+        // asfaosfiadoadso
+        $userCourses = array(); 
+        foreach($user->getCourses() as $course) {
+            $userCourses[] = $course->getId();
+        }
+
         // Prep the form for display
         $form = $this->createFormBuilder($user)
             ->add('username', 'text')
@@ -197,14 +241,15 @@ class AdminController extends Controller
             ))
             ->add('roleList', 'choice', array(
                 'choices'   => array(
-                    'ROLE_SUPER_ADMIN'   => 'ROLE_SUPER_ADMIN',
-                    'ROLE_INSTRUCTOR' => 'ROLE_INSTRUCTOR',
-                    'ROLE_STUDENT' => 'ROLE_STUDENT',
+                'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
+                'ROLE_INSTRUCTOR' => 'ROLE_INSTRUCTOR',
+                'ROLE_STUDENT' => 'ROLE_STUDENT'
                 ),
-                'expanded' => true,
+                'expanded' => false,
                 'label' => 'Roles',
-                'multiple'  => true,
+                'multiple'  => false,
                 'property_path' => false,
+                'required' => false
             ))
             ->add('courses', 'entity', array(
                 'class' => 'Slumlords\Bundle\Entity\Course',
@@ -224,12 +269,7 @@ class AdminController extends Controller
             if ($form->isValid())
             {
                 $roles = $form->get('roleList')->getData();
-
-                foreach ($roles as $key => $value)
-                {
-                    $user->addRole($value);
-                }
-
+                $user->setRoles(array($roles));
                 if ($form->get('password')->getData()) 
                 {
                     $factory = $this->get('security.encoder_factory');
@@ -239,6 +279,33 @@ class AdminController extends Controller
                     $user->setPassword($password);
                 }
 
+
+                if ($form->get('courses')->getData()) 
+                {
+                    //+die("found form items");
+                    foreach ($form->get('courses')->getData() as $course) {
+                        $courseFound = false;
+
+                        foreach ($userCourses as $currentCourse) {
+                            if ($course->getId() == $currentCourse) {
+                                $courseFound = true;
+                            }
+                        }
+
+                        if (!$courseFound) {
+                            $bankAccount = new Bank();
+                            $bankAccount->setUser($user);
+                            $bankAccount->setCourse($course);
+                            $bankAccount->setBalance(0);
+
+                            $em = $this->getDoctrine()->getManager();
+                            $em->persist($bankAccount);
+                            $em->flush();
+                        }
+                    }
+                }
+
+
                 // Save changes to the database
                 $em = $this->getDoctrine()->getManager();
                 $this->get('fos_user.user_manager')->updateUser($user, false);
@@ -246,7 +313,7 @@ class AdminController extends Controller
                 $em->flush();
 
                 // After save, redirect viewer back to users list
-                return $this->redirect($this->generateUrl('slumlords_admin_users'));;
+                return $this->redirect($this->generateUrl('slumlords_admin_users'));
             }
         }
 

@@ -1,22 +1,61 @@
 {% extends 'SlumlordsBundle:Default:index.html.twig' %}
 
+
+
 {% block body %}
+
 
 <header>
   <div class="wrapper">
-    <a href="#"><img src="http://1.bp.blogspot.com/-Q5DcF4l4G2E/TcRW65FSXfI/AAAAAAAADso/9PiZxiErhJo/s400/slumlord.jpg" alt="Fighting Slumlords" title="Fighting Slumlords"/></a>
+    <a href="#"><img src="http://grantjkidney.com/wp-content/uploads/2012/06/slumlord-e1340598131453.png" alt="Fighting Slumlords" title="Fighting Slumlords"/></a>
   </div>
 </header>
 
+<div>
 
-<h1> {{user.firstName}}'s Account</h1>
+<h1> {{user.firstName}} {{user.lastName}}</h1>
 
-<form>
-  <strong>Name:</strong> {{user.lastName}}, {{user.firstName}} <br>
-  <strong>Email:</strong> {{user.email}} <br>
-</form>
+<nav>
+ <tr>
+   <td><a href="{{ path('fos_user_profile_edit') }}" class="btn  btn-primary">Edit Profile</a></td>
+   <td><a href="{{ path('fos_user_profile_edit') }}" class="btn  btn-primary">Activity</a></td>
+   <td><a href="{{ path('fos_user_profile_edit') }}" class="btn  btn-primary">Attendance</a></td>
+   <td><a href="{{ path('fos_user_profile_edit') }}" class="btn  btn-primary">Money Profile</a></td>
+ </tr>
+</nav>
+</div>
+
+<div>
+ <center>
+  <script>
+   var today = new Date();
+   var dd = today.getDate();
+   var mm = today.getMonth()+1;
+   var yyyy = today.getFullYear();
+   if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm} today = mm+'/'+dd+'/'+yyyy;
+   document.write(today);
+  </script>
+ </center>
+</div>
+
+<!------------------------------------------- This section was a look at positioning. Ignore this
+
+  <div style = "position:absolute; top:80px; left:700px;">
+    <a href="#"><img src="http://grantjkidney.com/wp-content/uploads/2012/06/slumlord-e1340598131453.png" alt="Fighting Slumlords" title="Fighting Slumlords"/></a>
+  </div>
+
+--------------------------------------------------------------------------------------------------------------->
+
+<div id="chartMoney" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+{% block javascripts %}
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>}
+<script src="{{ asset('/js/debt_money.js') }}" type="text/javascript"></script>
+
+{% endblock %}
 
 
-<a href="{{ path('fos_user_profile_edit') }}" class="btn">Edit Profile</a>
 {% endblock %}
 

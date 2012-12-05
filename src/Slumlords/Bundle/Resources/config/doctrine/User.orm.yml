@@ -24,15 +24,9 @@ Slumlords\Bundle\Entity\User:
                 inverseJoinColumns:
                     course_id: 
                         referencedColumnName: id
-        properties:
-            targetEntity: Property
-            joinTable:
-                name: users_properties
-                joinColumns:
-                    user_id:
-                        referencedColumnName: id
-                inverseJoinColumns:
-                    property_id:
-                        referencedColumnName: id
-                        unique: true
+        groups:
+            targetEntity: UserGroup
+            joinColumn:
+                name: group_id
+                referencedColumnName: id
     lifecycleCallbacks: {  }

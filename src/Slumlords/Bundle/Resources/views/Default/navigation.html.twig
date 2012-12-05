@@ -16,13 +16,19 @@
 		    			<b class="caret"></b>
 		    		</a>
 		    		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-super-admin">
-                                        {% if is_granted('ROLE_SUPER_ADMIN') %}
-		    			<li>
-		    				<a href="{{ path('slumlords_admin_users') }}">Users</a>
-		    			</li>
-		    			<li>
-		    				<a href="{{ path('slumlords_admin_courses') }}">Courses</a>
-		    			</li>
+                                        {% if is_granted('ROLE_INSTRUCTOR') %}
+                                            {% if is_granted('ROLE_SUPER_ADMIN') %}
+		    			        <li>
+		    		    	     	    <a href="{{ path('slumlords_admin_users') }}">Users</a>
+		    			        </li>
+                                            {% else %}
+                                                <li>
+                                                    <a href="{{ path('slumlords_admin_users') }}">Students</a>
+                                                </li>
+                                            {% endif %}
+		    			    <li>  
+		    				    <a href="{{ path('slumlords_admin_courses') }}">Courses</a>
+		    			    </li>
                                         {% endif %}
 		    		</ul>
 		    	</li>

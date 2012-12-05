@@ -8,5 +8,17 @@ Slumlords\Bundle\Entity\Property:
                 strategy: AUTO
         rent: 
             type: float
+        isActive:
+            type: boolean
     lifecycleCallbacks: {  }
-
+    manyToOne: 
+        user:
+            targetEntity: User
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+        course:
+            targetEntity: Course
+            joinColumn: 
+                name: course_id
+                referencedColumnName: id 

@@ -18,14 +18,3 @@ Slumlords\Bundle\Entity\Course:
         users:
             targetEntity: User
             mappedBy: courses
-        properties:
-            targetEntity: Property
-            joinTable:
-                name: courses_properties
-                joinColumns:
-                    course_id:
-                        referencedColumnName: id
-                inverseJoinColumns:
-                    property_id:
-                        referencedColumnName: id
-                        unique: true

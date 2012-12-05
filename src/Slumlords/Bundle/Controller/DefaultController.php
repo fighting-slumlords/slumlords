@@ -5,48 +5,110 @@ namespace Slumlords\Bundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Slumlords\Bundle\Entity\Log;
 use Slumlords\Bundle\Entity\Bank;
+use Slumlords\Bundle\Entity\User;
+use Slumlords\Bundle\Entity\Property;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
     public function indexAction() 
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        //$user = $this->get('security.context')->getToken()->getUser();
 
         /*
-        $log = new Log();
-        $log->entry('transaction', 1000);
-        $log2 = new Log();
-        $log2->entry('event', 100000, 1, 0, 0);
-        $log3 = new Log();
-        $log3->entry('purchase', 100, 1, 0, 0);
+        $newUser = new User();
+
+        $newUser->setUsername('mjhale');
+        $newUser->setEmail('john.doe@example.com');
+        $newUser->setPlainPassword('failure');
+        $newUser->setFirstName("Michael");
+        $newUser->setLastName("Hale");
+        $newUser->setWage(5000);
+        $newUser->setSuperAdmin(true);
+        $newUser->setEnabled(true);
 
         $em = $this->getDoctrine()->getEntityManager();
-        $em->persist($log);
-        $em->persist($log2);
-        $em->persist($log3);
+        $em->persist($newUser);
         $em->flush();
         */
-        
         return $this->render('SlumlordsBundle:Default:index.html.twig', array(
-            'user' => $user));
+            //'user' => $user
+        ));
+    }
+
+    public function propertyRentAction($id, Request $request)
+    {
+        $property = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Property')
+            ->find($id);
+
+
+
+        // Catch the POST update once user saves the form
+        // and hits the page again
+        if ($request->isMethod('POST')) 
+        {
+            $user = $this->get('security.context')->getToken()->getUser();
+
+            return $property->getRent();
+        }
+
+        return $property->getRent;
+    }
+
+    public function propertyEditAction($id, Request $request)
+    {
+        $property = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Property')
+            ->find($id);
+
+        // Prep the form for display
+        $form = $this->createFormBuilder($property)
+            ->add('rent', 'integer')
+            ->getForm();
+
+        // Catch the POST update once user saves the form
+        // and hits the page again
+        if ($request->isMethod('POST')) 
+        {
+            $form->bind($request);
+
+            if ($form->isValid())
+            {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($property);
+                $em->flush();
+
+                return $this->redirect($this->generateUrl('slumlords_properties'));;
+            }
+        }
+
+        return $this->render('SlumlordsBundle:Default:property_edit.html.twig', array(
+            'property' => $property,
+            'form' => $form->createView(),
+        ));
     }
 
     public function propertiesAction()
     {
-        $course = $this->getDoctrine()
-            ->getRepository('SlumlordsBundle:Course')
-            ->find(12);
+        $user = $this->get('security.context')->getToken()->getUser();
 
-        $propertyUsername = array();
- 
-        foreach ($course->getProperties() as $property) {
-         
-echo $property->getId();
-        } 
+        $course = $user->getCourses()[0];
 
-            
+        if (!$course) {
+            $course = null;
+        }
+        
+        $properties = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Property')
+            ->findBy(
+                array('course' => $course)
+            );
+        
         return $this->render('SlumlordsBundle:Default:properties.html.twig', array(
-            'course' => $course,
+            'properties' => $properties,
+            'user'       => $user,
+            'course'     => $course
         ));
     }
 

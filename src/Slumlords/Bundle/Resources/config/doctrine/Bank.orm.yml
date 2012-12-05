@@ -7,8 +7,18 @@ Slumlords\Bundle\Entity\Bank:
             id: true
             generator:
                 strategy: AUTO
-        accountID:
-            type: integer
         balance:
             type: float
     lifecycleCallbacks: {  }
+    manyToOne: 
+        user:
+            targetEntity: User
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+        course:
+            targetEntity: Course
+            joinColumn: 
+                name: course_id
+                referencedColumnName: id 
+

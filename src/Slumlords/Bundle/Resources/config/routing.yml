@@ -42,6 +42,18 @@ slumlords_properties:
     pattern: /properties
     defaults: { _controller: SlumlordsBundle:Default:properties }
 
+slumlords_property_edit:
+    pattern: /properties/{id}
+    defaults: { _controller: SlumlordsBundle:Default:propertyEdit }
+
+slumlords_property_rent:
+    pattern: /properties/{id}/rent
+    defaults: { _controller: SlumlordsBundle:Default:propertyRent }
+
 slumlords_bank:
     pattern: /bank
     defaults: { _controller: SlumlordsBundle:Default:bank }
+
+fos_user_group:
+    resource: "@FOSUserBundle/Resources/config/routing/group.xml"
+    prefix: /group

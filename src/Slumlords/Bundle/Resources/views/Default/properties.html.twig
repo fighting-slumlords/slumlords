@@ -2,26 +2,44 @@
 
 {% block body %}
 <div style="float: right;">
-    <select>
-      <option>{{ course.name }}</option>
+    <form action="{{ path('slumlords_properties') }}" method="post" enctype="multipart/form-data">
+    <select name="courses">
+        {% for course in user.courses %}
+            <option>{{ course.name }}</option>
+        {% endfor %}
     </select>
+    </form>
 </div>
 
 <h1>Properties</h1>
 
 <table class="table properties" cellspacing="10" cellpadding="10">
     <tbody>
-    {% for i in 1..course.columns %}
-        <tr>
-            {% for j in 1..course.rows %}
-                {% set property = course.getProperties[(j-1)*course.columns+(i-1)] %}
-                <td class="span2">
-                    {{ property.id }}<br />
-                    Rent: {{ property.rent }}
+        {% if properties is empty %}
+            <tr> 
+                <td>No properties exist for {{ course.name }}</td>
+            </tr>
+        {% else %}
+            {% for i in 1..course.columns %}
+                <tr>
+                    {% for j in 1..course.rows %}
+                    {# set property = properties[(j-1)*course.columns+(i-1)] #}
+                        {% set property = properties[(j-1)*course.columns+(i-1)] %}
+                        <td class="span2">
+                            <a href="{{ path('slumlords_property_edit', {'id': property.id}) }}" class="btn btn-mini">Manage</a><br />
+
+                            {{ property.id }}<br />
+                            {% if property.user is null %}
+                                Bank<br />
+                            {% else %}
+                                {{ property.user }}<br />
+                            {% endif %}
+                            Rent: {{ property.rent }}
+                        </td>
+                    {% endfor %}
                 </td>
             {% endfor %}
-        </td>
-    {% endfor %}
+        {% endif %}
     </tbody>
 </table>
 {% endblock %}

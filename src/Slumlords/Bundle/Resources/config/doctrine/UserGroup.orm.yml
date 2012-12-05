@@ -1,0 +1,12 @@
+Slumlords\Bundle\Entity\UserGroup:
+    type: entity
+    table: null
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                 strategy: AUTO
+        typeName:
+            type: string
+    lifecycleCallbacks: {  }

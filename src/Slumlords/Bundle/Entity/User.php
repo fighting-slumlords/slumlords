@@ -32,8 +32,12 @@ class User extends BaseUser
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="MyProject\MyBundle\Entity\UserGroup")
+     * @ORM\JoinTable(name="fos_user_user_group",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")})
      */
-    private $properties;
+    protected $group;
 
     /**
      * Constructor
@@ -42,9 +46,9 @@ class User extends BaseUser
     {
         parent::__construct();
         $this->courses = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->properties = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->group = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
+    
     /**
      * Set firstName
      *
@@ -54,7 +58,7 @@ class User extends BaseUser
     public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
-    
+        
         return $this;
     }
 
@@ -146,37 +150,37 @@ class User extends BaseUser
     {
         return $this->courses;
     }
-
+    
     /**
-     * Add properties
+     * Add group
      *
-     * @param Slumlords\Bundle\Entity\Property $properties
+     * @param Slumlords\Bundle\Entity\UserGroup $group
      * @return User
      */
-    public function addProperty(\Slumlords\Bundle\Entity\Property $properties)
+    public function addGroups(\Slumlords\Bundle\Entity\UserGroup $group)
     {
-        $this->properties[] = $properties;
-    
+        $this->group[] = $group;
         return $this;
     }
 
     /**
-     * Remove properties
+     * Remove group
      *
-     * @param Slumlords\Bundle\Entity\Property $properties
+     * @param Slumlords\Bundle\Entity\UserGroup $group
      */
-    public function removeProperty(\Slumlords\Bundle\Entity\Property $properties)
+    public function removeGroups(\Slumlords\Bundle\Entity\UserGroup $group)
     {
-        $this->properties->removeElement($properties);
+        $this->group-removeElement($group);
     }
-
+    
     /**
-     * Get properties
+     * Get groups
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
-    public function getProperties()
+    public function getGroup()
     {
-        return $this->properties;
+        return $this->group;
     }
+    
 }
