@@ -42,12 +42,16 @@ slumlords_properties:
     pattern: /properties
     defaults: { _controller: SlumlordsBundle:Default:properties }
 
-slumlords_property_edit:
+slumlords_properties_show:
     pattern: /properties/{id}
+    defaults: { _controller: SlumlordsBundle:Default:propertiesShow }
+
+slumlords_property_edit:
+    pattern: /properties/{courseId}/{id}/edit
     defaults: { _controller: SlumlordsBundle:Default:propertyEdit }
 
 slumlords_property_rent:
-    pattern: /properties/{id}/rent
+    pattern: /properties/{courseId}/{id}/rent
     defaults: { _controller: SlumlordsBundle:Default:propertyRent }
 
 slumlords_bank:

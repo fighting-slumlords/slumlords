@@ -14,6 +14,13 @@
             {% include "SlumlordsBundle:Default:navigation.html.twig" %}
 
             <div class="span12">
+                {% block alerts %}
+                    {% for flashMessage in app.session.flashbag.get('notice') %}
+                        <div class="alert">
+                           {{ flashMessage }}
+                        </div>
+                    {% endfor %}
+                {% endblock %}
                 {% block body %}
                 <img src="http://1.bp.blogspot.com/-Q5DcF4l4G2E/TcRW65FSXfI/AAAAAAAADso/9PiZxiErhJo/s400/slumlord.jpg" alt="Fighting Slumlords" align="left" />
                 <div>

@@ -67,6 +67,20 @@ class Bank
         return $this->accountID;
     }
 
+
+    /**
+     * Add balance
+     *
+     * @param float $balance
+     * @return Bank
+     */
+    public function addBalance($balance)
+    {
+        $this->balance += $balance;
+    
+        return $this;
+    }
+
     /**
      * Set balance
      *

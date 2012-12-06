@@ -6,11 +6,15 @@
 <strong>Balance:</strong> ${{account.balance}} 
 <strong>Wage:</strong> ${{user.wage}}
 
+
 <div style="float: right;">
-    <select>
-      <option>ECON 213</option>
-      <option>MATH 333</option>
+    <form action="{{ path('slumlords_properties') }}" method="post" enctype="multipart/form-data">
+    <select name="courses">
+        {% for course in user.courses %}
+            <option>{{ course.name }}</option>
+        {% endfor %}
     </select>
+    </form>
 </div>
 
 <table class="table table-striped">

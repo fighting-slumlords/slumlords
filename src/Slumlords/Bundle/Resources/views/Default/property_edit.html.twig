@@ -1,24 +1,28 @@
 {% extends 'SlumlordsBundle:Default:index.html.twig' %}
 
 {% block body %}
-	<h1>Rent Property {{ property.id }}</h1>
-	Owned by: 
-	{% if property.user is null %}
-	   Bank<br />
+<h1>Rent Property #{{ property.id }}</h1>
+<p>    
+    Owned by: 
+    {% if property.user is null %}
+        Bank<br />
     {% else %}
-        {{ property.user }} <br />
-    {% endif %}.
-	Status: 
+        {{ property.user }}<br />
+    {% endif %}
+    Status: 
     {% if property.isActive %}
-	   Available <br />
+	   <span class="label label-success">Available</span>
     {% else %}
-	   Unavailable <br />
-	{% endif %}
-	<br />
-	<form action="{{ path('slumlords_property_rent', {'id': property.id}) }}" method="post" {{ form_enctype(form) }}>
-		{# {{ form_widget(form) }} #}
-		Rent: {{ property.rent }}
-		<br />
-		<input type="submit" value="Rent" />
-	</form>
+	   <span class="label label-important">Unavailable</span>
+    {% endif %} 
+</p>
+
+<form action="{{ path('slumlords_property_rent', {'courseId': courseId, 'id': property.id}) }}" method="post" {{ form_enctype(form) }}>
+    {# {{ form_widget(form) }} #}
+    <p>
+        Account Balance: ${{ account.balance }}<br />
+        Property Rent: ${{ property.rent }}
+    </p>
+    <input class="btn btn-primary" type="submit" value="Rent This Property" />
+</form>
 {% endblock %}

@@ -52,9 +52,9 @@ class AdminController extends Controller
 
             if ($form->isValid()) 
             {
+		// Persist $course and calculate total number of properties
                 $em = $this->getDoctrine()->getManager();
                 $totalProperties = $form->get('columns')->getData() * $form->get('rows')->getData();
-
                 $em->persist($course);
                 $em->flush();
 
@@ -62,18 +62,11 @@ class AdminController extends Controller
                 for ($i = 0; $i < $totalProperties; $i++) {
                     $property = new Property();
                     $property->setRent(0);
-                    $property->setIsActive(1);
-                    $property->setCourse($course);
+                    $property->setIsActive(1); // Default the property to active
+                    $property->setCourse($course); // Assign property a course
                     $em->persist($property);
                     $em->flush();
                 }
-
-
-
-
-
-                //$log = new Log();
-                // .. some code goes here
 
                 // After save, redirect viewer back to users list
                 return $this->redirect($this->generateUrl('slumlords_admin_courses'));
@@ -93,8 +86,6 @@ class AdminController extends Controller
 
         // Prep the form for display
         $form = $this->createFormBuilder($course)
-            ->add('columns', 'integer')
-            ->add('rows', 'integer')
             ->add('name', 'text')
             ->add('active', 'choice', array(
                 'choices'  => array(0 => 'Enabled', 1 => 'Disabled'),
@@ -103,7 +94,6 @@ class AdminController extends Controller
             ->getForm();
 
         // Catch the POST update once user saves the form
-        // and hits the page again
         if ($request->isMethod('POST')) 
         {
             $form->bind($request);
@@ -111,10 +101,10 @@ class AdminController extends Controller
             if ($form->isValid())
             {
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($course);
+                $em->persist($course); // Persist the form changes
                 $em->flush();
 
-                return $this->redirect($this->generateUrl('slumlords_admin_courses'));;
+                return $this->redirect($this->generateUrl('slumlords_admin_courses'));
             }
         }
 
@@ -189,17 +179,14 @@ class AdminController extends Controller
                 {
                     $factory = $this->get('security.encoder_factory');
                     $encoder = $factory->getEncoder($user);
-                    $password = $encoder->encodePassword($form->get('password')->getData(), $user->getSalt());
+                    $password = $encoder->encodePassword($form->get('password')->getData(), $user->getSalt()); // Hash plaintext-provided password
 
-                    $user->setPassword($password);
+                    $user->setPassword($password); // Pass on hashed password
                 }
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($user);
                 $em->flush();
-
-                //$log = new Log();
-                // .. some code goes here
 
                 // After save, redirect viewer back to users list
                 return $this->redirect($this->generateUrl('slumlords_admin_users'));;
@@ -217,7 +204,8 @@ class AdminController extends Controller
             ->getRepository('SlumlordsBundle:User')
             ->find($id);
 
-        // asfaosfiadoadso
+        // Generate an array of the user's current course IDs
+        // - Needed for properly setting up account information
         $userCourses = array(); 
         foreach($user->getCourses() as $course) {
             $userCourses[] = $course->getId();
@@ -241,9 +229,9 @@ class AdminController extends Controller
             ))
             ->add('roleList', 'choice', array(
                 'choices'   => array(
-                'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
-                'ROLE_INSTRUCTOR' => 'ROLE_INSTRUCTOR',
-                'ROLE_STUDENT' => 'ROLE_STUDENT'
+                    'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
+                    'ROLE_INSTRUCTOR' => 'ROLE_INSTRUCTOR',
+                    'ROLE_STUDENT' => 'ROLE_STUDENT'
                 ),
                 'expanded' => false,
                 'label' => 'Roles',
@@ -268,8 +256,10 @@ class AdminController extends Controller
 
             if ($form->isValid())
             {
+                // Get the supplied role
                 $roles = $form->get('roleList')->getData();
-                $user->setRoles(array($roles));
+                $user->setRoles(array($roles)); // save the supplied role
+
                 if ($form->get('password')->getData()) 
                 {
                     $factory = $this->get('security.encoder_factory');
@@ -279,19 +269,23 @@ class AdminController extends Controller
                     $user->setPassword($password);
                 }
 
-
+                // Check to see if the form set any courses
                 if ($form->get('courses')->getData()) 
                 {
-                    //+die("found form items");
+                    // Loop through each course and check to see if the user already has a bank account
                     foreach ($form->get('courses')->getData() as $course) {
                         $courseFound = false;
 
+                        // Loop through each of the user's current courses
                         foreach ($userCourses as $currentCourse) {
+                            // Check to see if current course is selected
                             if ($course->getId() == $currentCourse) {
-                                $courseFound = true;
+                                $courseFound = true; // User has the course
                             }
                         }
 
+                        // Setup a new bank account if the user doesn't have one
+                        // @TODO Will it add a new one if the user removes the class and then readds?
                         if (!$courseFound) {
                             $bankAccount = new Bank();
                             $bankAccount->setUser($user);

@@ -3,15 +3,19 @@
 {% block body %}
 <div style="float: right;">
     <form action="{{ path('slumlords_properties') }}" method="post" enctype="multipart/form-data">
-    <select name="courses">
-        {% for course in user.courses %}
-            <option>{{ course.name }}</option>
+    <select name="courses_select" class="courses_select">
+        {% for listCourse in user.courses %}
+	    {% if listCourse.id == course.id %}
+                <option value="{{ listCourse.id }}" selected="selected">{{ listCourse.name }}</option>
+            {% else %}
+                <option value="{{ listCourse.id }}">{{ listCourse.name }}</option>
+            {% endif %}
         {% endfor %}
     </select>
     </form>
 </div>
 
-<h1>Properties</h1>
+<h1>{{ course.name }} Properties</h1>
 
 <table class="table properties" cellspacing="10" cellpadding="10">
     <tbody>
@@ -20,13 +24,13 @@
                 <td>No properties exist for {{ course.name }}</td>
             </tr>
         {% else %}
-            {% for i in 1..course.columns %}
+            {% for i in 1..course.rows %}
                 <tr>
-                    {% for j in 1..course.rows %}
+                    {% for j in 1..course.columns %}
                     {# set property = properties[(j-1)*course.columns+(i-1)] #}
                         {% set property = properties[(j-1)*course.columns+(i-1)] %}
                         <td class="span2">
-                            <a href="{{ path('slumlords_property_edit', {'id': property.id}) }}" class="btn btn-mini">Manage</a><br />
+                            <a href="{{ path('slumlords_property_edit', {'courseId': course.id, 'id': property.id}) }}" class="btn btn-mini">Manage</a><br />
 
                             {{ property.id }}<br />
                             {% if property.user is null %}
