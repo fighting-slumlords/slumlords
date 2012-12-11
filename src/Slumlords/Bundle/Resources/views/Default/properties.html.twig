@@ -15,7 +15,12 @@
     </form>
 </div>
 
-<h1>{{ course.name }} Properties</h1>
+<h1>{{ course.name }} Properties
+{% if is_granted('ROLE_INSTRUCTOR') %}
+<a href="{{ path('slumlords_user_attendance', {'courseId': course.id}) }}" class="btn btn-mini">Take Attendance</a><br />
+{% endif %}
+</h1>
+
 
 <table class="table properties" cellspacing="10" cellpadding="10">
     <tbody>
@@ -27,16 +32,20 @@
             {% for i in 1..course.rows %}
                 <tr>
                     {% for j in 1..course.columns %}
-                    {# set property = properties[(j-1)*course.columns+(i-1)] #}
-                        {% set property = properties[(j-1)*course.columns+(i-1)] %}
-                        <td class="span2">
+                        {% set property = properties[(i-1)*course.columns+(j-1)] %}
+                        {% if property.isActive %}
+				{% set var_unavailable = "" %}
+			{% else %}
+				{% set var_unavailable = "property-inactive" %}
+			{% endif %}
+			<td class="span2 {{var_unavailable}}">
                             <a href="{{ path('slumlords_property_edit', {'courseId': course.id, 'id': property.id}) }}" class="btn btn-mini">Manage</a><br />
 
                             {{ property.id }}<br />
-                            {% if property.user is null %}
+                            {% if property.owner is null %}
                                 Bank<br />
                             {% else %}
-                                {{ property.user }}<br />
+                                {{ property.owner }}<br />
                             {% endif %}
                             Rent: {{ property.rent }}
                         </td>

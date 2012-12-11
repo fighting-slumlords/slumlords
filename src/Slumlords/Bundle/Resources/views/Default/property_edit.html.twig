@@ -2,27 +2,90 @@
 
 {% block body %}
 <h1>Rent Property #{{ property.id }}</h1>
-<p>    
-    Owned by: 
-    {% if property.user is null %}
-        Bank<br />
-    {% else %}
-        {{ property.user }}<br />
-    {% endif %}
-    Status: 
-    {% if property.isActive %}
+<table class="table properties" cellspacing="10" cellpadding="10">
+  <tbody>
+    <tr>
+    <td>
+      <p>    
+        Owned by: 
+        {% if property.owner is null %}
+           Bank<br />
+        {% else %}
+           {{ property.owner }}<br />
+        {% endif %}
+        Status: 
+        {% if property.isActive %}
 	   <span class="label label-success">Available</span>
-    {% else %}
+        {% else %}
 	   <span class="label label-important">Unavailable</span>
-    {% endif %} 
-</p>
+         {% endif %} 
+       </p>
 
-<form action="{{ path('slumlords_property_rent', {'courseId': courseId, 'id': property.id}) }}" method="post" {{ form_enctype(form) }}>
-    {# {{ form_widget(form) }} #}
-    <p>
-        Account Balance: ${{ account.balance }}<br />
-        Property Rent: ${{ property.rent }}
-    </p>
-    <input class="btn btn-primary" type="submit" value="Rent This Property" />
-</form>
+
+        <p>
+          Account Balance: ${{ account.balance }}<br />
+          Property Rent: ${{ property.rent }}<br />
+	  Property Price: ${{ property.price }}
+        </p>
+
+        {% if (property.isActive) %}
+          <form action="{{ path('slumlords_property_rent', {'courseId': courseId, 'id': property.id}) }}" method="post" {{ form_enctype(form) }}>
+            <input class="btn btn-primary" type="submit" value="Rent This Property" />
+          </form>
+        {% endif %}
+    </td>
+    <td>
+      {% if (app.user != property.owner) and (app.user.roles[0] == "ROLE_STUDENT") %}
+      <form action="{{ path('slumlords_property_offer', {'courseId': courseId, 'id': property.id}) }}" method="post" {{ form_enctype(form) }}>
+        Place an offer for the property here:<br />
+	<input type="number" name="offer" value="{{ property.price }}"><br />
+        <input class="btn btn-primary" type="submit" value="Place Offer" />
+      </form>
+      {% else %}
+      <form action="{{ path('slumlords_property_edit', {'courseId': courseId, 'id': property.id}) }}" method="post" {{ form_enctype(form) }}>
+        Set Rent:<br />
+	<input type="number" name="rent" value="{{ property.rent }}"><br />
+	Set Price:<br />
+	<input type="number" name="price" value="{{ property.price }}"><br />
+        <input class="btn btn-primary" type="submit" value="Update Property" />
+      </form>
+      {% endif %}
+    </td>
+    </tr>
+  </tbody>
+</table>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<td>Buyer</td>
+			<td>Amount</td>
+			<td>Date</td>
+			<td>Status</td>
+		</tr>
+	</thead>
+	<tbody>
+	{% for offer in offers|reverse %}
+		<tr>
+			<td>{{offer.buyer}}</td>
+			<td>{{offer.amount}}</td>
+			<td>{{offer.timestamp | date('F j, Y H:i')}}</td>
+			<td>
+			{% if (app.user == property.owner) or (app.user.roles[0] != "ROLE_STUDENT")%}
+			  {% if offer.status != "waiting" %}
+			    {{offer.status}}
+			  {% else %}
+      				<form action="{{ path('slumlords_property_offer_response', {'courseId': courseId, 'id': property.id}) }}" method="post" {{ form_enctype(form) }}>
+			   	<input type="hidden" name="offer_id" value="{{offer.id}}">
+				<input class="btn btn-mini btn-success" name="action" type="submit" value="Accept">
+				<input class="btn btn-mini btn-danger" name="action" type="submit" value="Reject">
+				</form>
+                          {% endif %}
+			{% else %}
+				{{offer.status}}
+			{% endif %}
+			</td>
+		<tr>
+	{% endfor %}
+	</tbody>
+</table>
 {% endblock %}

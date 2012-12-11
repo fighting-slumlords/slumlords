@@ -30,9 +30,6 @@
 			<td>{{user.wage}}</td>
 			{# user.roles #}
 			<td>
-				{# @TODO Only show top hierarchical item
-				   Note by Tyler: Is it possible that a user can have multiple roles?
-				#}
 				{# Loop through all user's roles #}
 				{% for role in user.roles %}
 					{% if role == "ROLE_SUPER_ADMIN" %}

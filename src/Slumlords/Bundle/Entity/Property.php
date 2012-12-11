@@ -20,6 +20,12 @@ class Property
     private $rent;
 
     /**
+     * @var float $price
+     */
+    private $price;
+
+
+    /**
      * @var boolean $isActive
      */
     private $isActive;
@@ -27,7 +33,12 @@ class Property
     /**
      * @var Slumlords\Bundle\Entity\User
      */
-    private $user;
+    private $renter;
+
+    /**
+     * @var Slumlords\Bundle\Entity\User
+     */
+    private $owner;
 
     /**
      * @var Slumlords\Bundle\Entity\Course
@@ -69,6 +80,29 @@ class Property
     }
 
     /**
+     * Set price
+     *
+     * @param float $price
+     * @return Property
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    
+        return $this;
+    }
+
+    /**
+     * Get price
+     *
+     * @return float 
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
      * Set isActive
      *
      * @param boolean $isActive
@@ -92,26 +126,50 @@ class Property
     }
 
     /**
-     * Set user
+     * Set renter
      *
      * @param Slumlords\Bundle\Entity\User $user
      * @return Property
      */
-    public function setUser(\Slumlords\Bundle\Entity\User $user = null)
+    public function setRenter(\Slumlords\Bundle\Entity\User $user = null)
     {
-        $this->user = $user;
+        $this->renter = $user;
     
         return $this;
     }
 
     /**
-     * Get user
+     * Get renter
      *
      * @return Slumlords\Bundle\Entity\User 
      */
-    public function getUser()
+    public function getRenter()
     {
-        return $this->user;
+        return $this->renter;
+    }
+
+
+    /**
+     * Set owner
+     *
+     * @param Slumlords\Bundle\Entity\User $user
+     * @return Property
+     */
+    public function setOwner(\Slumlords\Bundle\Entity\User $user = null)
+    {
+        $this->owner = $user;
+    
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return Slumlords\Bundle\Entity\User 
+     */
+    public function getOwner()
+    {
+        return $this->owner;
     }
 
     /**

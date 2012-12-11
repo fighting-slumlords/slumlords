@@ -1,0 +1,46 @@
+{% extends 'SlumlordsBundle:Default:index.html.twig' %}
+
+{% block body %}
+    
+<center>
+   <h1 style="font-family:helvetica;">Attendance</h1>
+
+    <div class="btn-mini btn dropdown-toggle btn-info" data-toggle="dropdown">
+        <select class="input-small shadow_slect" id="ddlMonth" onchange="init()">
+            <option>January</option>
+            <option>February</option>
+            <option>March</option>
+            <option>April</option>
+            <option>May</option>
+            <option>June</option>
+            <option>July</option>
+            <option>August</option>
+            <option>September</option>
+            <option>October</option>
+            <option>November</option>
+            <option>December</option>
+        </select>
+    
+        <input type="text" value="2012" size="1" id="txtYear" onblur="init()" />
+
+    </div>
+</center>
+  
+<center>
+    <section>
+      <div style="margin:0 auto;">
+        <canvas style="border:1px dotted;padding:5px;" id="cal" width="750" height="645">
+          We're sorry, you don't have a browser that supports the &lt;canvas&gt; tag. :(
+        </canvas>
+      </div>
+</center>
+
+{% block javascripts %}
+
+<script src="{{ asset('/js/calendar.js') }}" type="text/javascript"></script>
+
+{% endblock %}
+
+
+{% endblock %}
+

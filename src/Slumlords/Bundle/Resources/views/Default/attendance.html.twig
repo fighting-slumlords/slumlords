@@ -1,0 +1,23 @@
+{% extends 'SlumlordsBundle:Default:index.html.twig' %}
+
+{% block body %}
+        <form class="form-horizontal" action="{{path('slumlords_attendance_property', {'courseId': courseId, 'username': "user"})}}">
+            <div class="control-group">
+                <label class="control-label" for="inputUsername">Username</label>
+                <div class="controls">
+                    <input type="text" id="inputUsername" placeholder="Username"> 
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputPassword">Password</label>
+                <div class="controls">
+                    <input type="password" id="inputPassword" placeholder="Password"> 
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn">Log in</button>
+                </div>
+            </div>
+        </form>
+{% endblock %}

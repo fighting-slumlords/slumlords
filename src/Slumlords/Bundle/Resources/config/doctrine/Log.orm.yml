@@ -15,10 +15,10 @@ Slumlords\Bundle\Entity\Log:
             type: decimal
             nullable: true
         targetID:
-            type: integer
+            type: string
             nullable: true
         originID:
-            type: integer
+            type: string
             nullable: true
         propertyID:
             type: integer

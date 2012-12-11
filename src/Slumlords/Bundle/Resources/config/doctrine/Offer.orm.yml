@@ -1,0 +1,26 @@
+Slumlords\Bundle\Entity\Offer:
+    type: entity
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        amount:
+            type: float
+        status:
+            type: string
+        timestamp:
+            type: datetime
+    lifecycleCallbacks: {  }
+    manyToOne:
+        buyer:
+            targetEntity: User
+            joinColumn:
+                name: buyer_id
+                referencedColumnName: id
+        property:
+            targetEntity: Property
+            joinColumn:
+                name: property_id
+                referencedColumnName: id

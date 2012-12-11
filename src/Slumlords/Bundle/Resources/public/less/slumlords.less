@@ -1,5 +1,5 @@
 body {
-margin-top: 15px;
+	margin-top: 15px;
 }
 h1 {
 	font-size: 34px;
@@ -8,18 +8,26 @@ h1 {
 	margin-left: 10px !important;
 }
 table.properties {
-	border-collapse: collapse;
+	border-collapse: separate;
+        border-spacing: 20px 20px;
 }
 td.span2 {
-	background-color: #ccc;
-	margin: 1em;
+        background: #CC7722 url(/img/wood_pattern.jpg) repeat-x 0 0;
+        margin: 1em;
 	max-height: 10em;
 	max-width: 10em;
-	padding: .4em;
 	text-align: center;
-	border: 10px solid white;
+        border-radius: 10px;
+        display: block;
+}
+td.property-inactive {
+        color: #000;
+        opacity: 0.65;
+        filter: alpha(opacity=65);
+	background-color: #696969 !important;
 }
 .properties .span2:hover {
-	background-color: #666;
-	cursor: pointer;
+        background-image: none;
+	background-color: #F4A460;
+        cursor: pointer;
 }

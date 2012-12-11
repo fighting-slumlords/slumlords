@@ -5,6 +5,7 @@ namespace Slumlords\Bundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Slumlords\Bundle\Entity\Log;
 use Slumlords\Bundle\Entity\Bank;
+use Slumlords\Bundle\Entity\Offer;
 use Slumlords\Bundle\Entity\User;
 use Slumlords\Bundle\Entity\Property;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,7 @@ class DefaultController extends Controller
 {
     public function indexAction() 
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
 
         /*
         $newUser = new User();
@@ -37,6 +38,127 @@ class DefaultController extends Controller
             'user' => $user
         ));
     }
+    
+    public function attendanceAction($courseId)
+    {
+        $users = $this->getDoctrine()
+                      ->getRepository('SlumlordsBundle:Course')
+                      ->find($courseId)
+                      ->getUsers();
+ 
+        return $this->render('SlumlordsBundle:Default:attendance.html.twig',
+                             array('users' => $users,
+                                   'courseId' => $courseId)
+                             );
+    }
+
+    public function propertyOfferResponseAction($courseId, $id, Request $request) 
+    {
+
+        $user = $this->get('security.context')->getToken()->getUser();
+  
+        $offer = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Offer')
+            ->find($request->request->get('offer_id'));
+
+        $property = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Property')
+            ->find($id);
+
+        $bankAccount = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Bank')
+            ->findOneBy(
+                array('course' => $property->getCourse(), 'user' => $user)
+            );
+
+        $newOwnerBankAccount = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Bank')
+            ->findOneBy(
+                array('course' => $property->getCourse(), 'user' => $offer->getBuyer())
+            );
+
+        if ($request->isMethod('POST')) 
+        {
+            if ($request->request->get('action') == "Accept") {
+                 $offer->setStatus('accepted');
+                 $property->setOwner($offer->getBuyer());
+                 // increase old owner's bank
+                 $bankAccount->addBalance($offer->getAmount());
+                 // decrease new owner's bank
+                 $newOwnerBankAccount->setBalance($newOwnerBankAccount->getBalance() - $offer->getAmount());
+		 $logSeller = new Log();
+		 $logSeller->entry('Sold', $offer->getAmount(), $user->getUsername(), $offer->getBuyer()->getUsername(), $property->getID());
+                 $logBuyer = new Log();
+		 $logBuyer->entry('Purchased', $offer->getAmount(), $offer->getBuyer()->getUsername(), $user->getUsername(), $property->getID());
+
+		 $em = $this->getDoctrine()->getEntityManager();
+                 $em->persist($logSeller);
+		 $em->persist($logBuyer);
+		 $em->flush();
+
+                 $this->get('session')->getFlashBag()->add('notice', 'It has been done.');
+            } else {
+		$offer->setStatus('rejected');
+		$em = $this->getDoctrine()->getEntityManager();
+		$em->flush();
+	
+		$this->get('session')->getFlashBag()->add('notice', 'Rejected ' . $offer->getBuyer() . '\'s offer.');
+            }
+	    return new RedirectResponse($this->generateUrl('slumlords_properties'));
+        }
+    }
+
+    public function propertyOfferAction($courseId, $id, Request $request)
+    { 
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        $property = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Property')
+            ->find($id);
+
+        $bankAccount = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Bank')
+            ->findOneBy(
+                array('course' => $property->getCourse(), 'user' => $user)
+            );
+
+        if ($request->isMethod('POST')) 
+        {
+            $offer = new Offer();
+              
+            $getOffer = $request->request->get('offer');
+
+            if (is_numeric($getOffer)) {
+                if ($bankAccount->getBalance() >= $getOffer) {
+                    $offer->setAmount($getOffer);
+                } else { 
+                    $this->get('session')->getFlashBag()->add('notice', 'Slow down there, pal.. Your offer of $'.$getOffer.' is more than what\'s in your bank account.');
+                    $url = $request->headers->get('referer');
+
+                    return new RedirectResponse($url);
+                }
+            } else { 
+                $this->get('session')->getFlashBag()->add('notice', 'Your offer of $'.$getOffer.' is not a number. Try again.');
+                $url = $request->headers->get('referer');
+
+                return new RedirectResponse($url);
+            }       
+
+            $offer->setBuyer($user);
+            $offer->setProperty($property);          
+            $offer->setStatus("waiting");
+            $offer->setTimestamp(new \DateTime('now'));
+
+            $em = $this->getDoctrine()->getEntityManager();
+            $em->persist($offer);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('notice', 'Your offer of $'.$_POST['offer'].' has been submitted.');
+            $url = $request->headers->get('referer');
+
+            return new RedirectResponse($url);
+        }
+    }
 
     public function propertyRentAction($courseId, $id, Request $request)
     {
@@ -49,9 +171,9 @@ class DefaultController extends Controller
         $bankAccount = $this->getDoctrine()
             ->getRepository('SlumlordsBundle:Bank')
             ->findOneBy(
-                array('course' => $property->getCourse()),
-                array('user' => $user)
+                array('course' => $property->getCourse(), 'user' => $user)
             );
+
         /* Example on how to add balance
         $em = $this->getDoctrine()->getManager();
         $bankAccount->addBalance(250);
@@ -72,12 +194,12 @@ class DefaultController extends Controller
                 // @TODO: Set property as occupied until next class
                 $em = $this->getDoctrine()->getManager();
                 $bankAccount->setBalance($bankAccount->getBalance() - $property->getRent());
-                $property->setIsActive(true);
+                $property->setIsActive(false);
+                $property->setRenter($user);
                 $em->flush();
 
                 
                 $this->get('session')->getFlashBag()->add('notice', 'Your balance has been updated to $'.$bankAccount->getBalance().' and you are now assigned to sit in Property #'.$property->getId().'.');
-                $url = $request->headers->get('referer');
                 return new RedirectResponse($this->generateUrl('slumlords_properties'));
             }
         }
@@ -94,8 +216,13 @@ class DefaultController extends Controller
         $bankAccount = $this->getDoctrine()
             ->getRepository('SlumlordsBundle:Bank')
             ->findOneBy(
-                array('course' => $property->getCourse()),
-                array('user' => $user)
+                array('course' => $property->getCourse(), 'user' => $user)
+            );
+   
+        $offers = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Offer')
+            ->findBy(
+                array('property' => $property)
             );
 
         // Prep the form for display
@@ -107,23 +234,28 @@ class DefaultController extends Controller
         // and hits the page again
         if ($request->isMethod('POST')) 
         {
-            $form->bind($request);
-
-            if ($form->isValid())
+            if ($request->request->get('rent')) 
             {
+                $property->setRent($request->request->get('rent'));
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($property);
                 $em->flush();
-
-                return $this->redirect($this->generateUrl('slumlords_properties'));;
             }
+            if ($request->request->get('price'))
+            {
+                $property->setPrice($request->request->get('price'));
+                $em = $this->getDoctrine()->getManager();
+                $em->flush();
+            }
+
+            return $this->redirect($this->generateUrl('slumlords_properties'));;
         }
 
         return $this->render('SlumlordsBundle:Default:property_edit.html.twig', array(
             'property' => $property,
             'courseId' => $courseId,
             'form' => $form->createView(),
-            'account' => $bankAccount
+            'account' => $bankAccount,
+            'offers' => $offers
         ));
     }
 
@@ -142,7 +274,8 @@ class DefaultController extends Controller
             ->findBy(
                 array('course' => $course)
             );
-        
+
+
         return $this->render('SlumlordsBundle:Default:properties.html.twig', array(
             'properties' => $properties,
             'user'       => $user,
@@ -174,24 +307,33 @@ class DefaultController extends Controller
 
         $course = $user->getCourses()[0]; // @TODO: Don't assume a course exists
 
-        $bank = $this->getDoctrine()->getRepository('SlumlordsBundle:Bank');
-
-        $account = $bank->findOneBy(
-            array('user' => $user),
-            array('course' => $course)
-        );
+        $account = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Bank')
+            ->findOneBy(
+                array('course' => $course, 'user' => $user)
+                //array('user' => $user)
+            );
 
         $log = $this->getDoctrine()->getRepository('SlumlordsBundle:Log')
             ->findBy(
-                array('targetID' => $user->getId()),
+                array('targetID' => $user->getUsername()),
                 array('timestamp' => 'DESC')
             );
-        
+        //print_r($log[0]);
+	/*$targetUsername = $this->getDoctrine()->getRepository('SlumlordsBundle:User')
+	    ->find($log->getTargetID()
+	    );
+	
+	$originUsername = $this->getDoctrine()->getRepository('SlumlordsBundle:User')
+	    ->find($log->getOriginID()
+	    );*/
         return $this->render('SlumlordsBundle:Default:bank.html.twig', array(
             'user' => $user,
             'account' => $account, 
             'log' => $log,
             'course' => $course
+	    //'originUser' => $originUsername,
+	    //'targetUser' => $targetUsername
         ));
     }
 }

@@ -54,19 +54,23 @@ class AdminController extends Controller
             {
 		// Persist $course and calculate total number of properties
                 $em = $this->getDoctrine()->getManager();
-                $totalProperties = $form->get('columns')->getData() * $form->get('rows')->getData();
+                //$totalProperties = $form->get('columns')->getData() * $form->get('rows')->getData();
                 $em->persist($course);
                 $em->flush();
 
                 // Populate the database with properties
-                for ($i = 0; $i < $totalProperties; $i++) {
+		// Assign the properties default values based on row position
+		for ($j = 1; $j <= $form->get('rows')->getData(); $j++) {
+                  for ($i = 1; $i <= $form->get('columns')->getData(); $i++) {
                     $property = new Property();
-                    $property->setRent(0);
+                    $property->setRent($j*50);
+                    $property->setPrice(0);
                     $property->setIsActive(1); // Default the property to active
                     $property->setCourse($course); // Assign property a course
                     $em->persist($property);
                     $em->flush();
-                }
+                  }
+		}// end for-loops
 
                 // After save, redirect viewer back to users list
                 return $this->redirect($this->generateUrl('slumlords_admin_courses'));
@@ -151,7 +155,11 @@ class AdminController extends Controller
                 'required' => true,
             ))       
             ->add('roleList', 'choice', array(
-                'choices'   => $this->container->getParameter('security.role_hierarchy.roles'),
+                'choices'   => array(
+                    'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
+                    'ROLE_INSTRUCTOR' => 'ROLE_INSTRUCTOR',
+                    'ROLE_STUDENT' => 'ROLE_STUDENT'
+                ),
                 'expanded' => false,
                 'label' => 'Role',
                 'multiple'  => false,
@@ -183,10 +191,30 @@ class AdminController extends Controller
 
                     $user->setPassword($password); // Pass on hashed password
                 }
-
+		$user->setEnabled(true);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($user);
                 $em->flush();
+
+                // Check to see if the form set any courses
+                if ($form->get('courses')->getData()) 
+                {
+                    // Loop through each course, check to see if user already has a bank account
+                    foreach ($form->get('courses')->getData() as $course) {
+
+                        // Setup a new bank account if the user doesn't have one
+                        // @TODO Will it add a new one if the user removes the class and then readds?
+                        // bankaccount stuff
+                        $bankAccount = new Bank();
+                        $bankAccount->setUser($user);
+                        $bankAccount->setCourse($course);
+                        $bankAccount->setBalance($user->getWage());
+
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($bankAccount);
+                        $em->flush();
+                    }
+                }
 
                 // After save, redirect viewer back to users list
                 return $this->redirect($this->generateUrl('slumlords_admin_users'));;
@@ -203,6 +231,10 @@ class AdminController extends Controller
         $user = $this->getDoctrine()
             ->getRepository('SlumlordsBundle:User')
             ->find($id);
+
+        $bank = $this->getDoctrine()
+            ->getRepository('SlumlordsBundle:Bank')
+            ->findBy(array('user' => $user));
 
         // Generate an array of the user's current course IDs
         // - Needed for properly setting up account information
@@ -237,7 +269,9 @@ class AdminController extends Controller
                 'label' => 'Roles',
                 'multiple'  => false,
                 'property_path' => false,
-                'required' => false
+                'required' => false,
+		'empty_value' => $user->getRoles()[0],
+                'empty_data' => $user->getRoles()[0]
             ))
             ->add('courses', 'entity', array(
                 'class' => 'Slumlords\Bundle\Entity\Course',
@@ -287,6 +321,7 @@ class AdminController extends Controller
                         // Setup a new bank account if the user doesn't have one
                         // @TODO Will it add a new one if the user removes the class and then readds?
                         if (!$courseFound) {
+                            // bankaccount stuff
                             $bankAccount = new Bank();
                             $bankAccount->setUser($user);
                             $bankAccount->setCourse($course);

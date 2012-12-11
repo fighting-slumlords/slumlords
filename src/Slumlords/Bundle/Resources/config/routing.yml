@@ -54,9 +54,29 @@ slumlords_property_rent:
     pattern: /properties/{courseId}/{id}/rent
     defaults: { _controller: SlumlordsBundle:Default:propertyRent }
 
+slumlords_property_offer:
+    pattern: /properties/{courseId}/{id}/offer
+    defaults: { _controller: SlumlordsBundle:Default:propertyOffer }
+
+slumlords_property_offer_response:
+    pattern: /properties/{courseId}/{id}/offer/response
+    defaults: { _controller: SlumlordsBundle:Default:propertyOfferResponse }
+
 slumlords_bank:
     pattern: /bank
     defaults: { _controller: SlumlordsBundle:Default:bank }
+
+slumlords_user_attendance:
+    pattern: /account/attendance/ 
+    defaults: { _controller: SlumlordsBundle:Account:userAttendance }
+
+slumlords_attendance:
+    pattern: /properties/{courseId}/attendance
+    defaults: { _controller: SlumlordsBundle:Default:attendance }
+
+slumlords_attendance_property:
+    pattern: /properties/{courseId}/attendance/{username}
+    defaults: { _controller: SlumlordsBundle:Default:attendanceProperty }
 
 fos_user_group:
     resource: "@FOSUserBundle/Resources/config/routing/group.xml"
